@@ -5,13 +5,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Screens
 import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/DetailsScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import MyAquariumScreen from './screens/MyAquariumScreen';
+import SearchScreen from './screens/SearchScreen';
+import PremiumScreen from './screens/PremiumScreen';
 
 //Screen names
 const homeName = "Home";
-const detailsName = "Details";
-const settingsName = "Settings";
+const myAquariumName = "MyAquarium";
+const searchName = "Search";
+const premiumName = "Premium"
 
 const Tab = createBottomTabNavigator();
 
@@ -28,11 +30,15 @@ function MainContainer() {
             if (rn === homeName) {
               iconName = focused ? 'home' : 'home-outline';
 
-            } else if (rn === detailsName) {
-              iconName = focused ? 'list' : 'list-outline';
+            } else if (rn === myAquariumName) {
+              iconName = focused ? 'logo-twitter' : 'logo-twitter';
 
-            } else if (rn === settingsName) {
-              iconName = focused ? 'settings' : 'settings-outline';
+            } else if (rn === searchName) {
+              iconName = focused ? 'search' : 'search-outline';
+
+            } else if (rn === premiumName) {
+              iconName = focused ? 'list' : 'list-outline';
+            
             }
 
             // You can return any component that you like here!
@@ -40,15 +46,16 @@ function MainContainer() {
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: '#051630',
           inactiveTintColor: 'grey',
           labelStyle: { paddingBottom: 10, fontSize: 10 },
           style: { padding: 10, height: 70}
         }}>
 
         <Tab.Screen name={homeName} component={HomeScreen} />
-        <Tab.Screen name={detailsName} component={DetailsScreen} />
-        <Tab.Screen name={settingsName} component={SettingsScreen} />
+        <Tab.Screen name={myAquariumName} component={MyAquariumScreen} />
+        <Tab.Screen name={searchName} component={SearchScreen} />
+        <Tab.Screen name={premiumName} component={PremiumScreen} />
 
       </Tab.Navigator>
     </NavigationContainer>
