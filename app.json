@@ -3,8 +3,47 @@
     "name": "Nille_expo",
     "slug": "Nille_expo",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
+    "plugins": [
+      "expo-build-properties"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "886cb0a6-0fc5-424c-ad4b-7c1566a9ee1b"
+      }
+    }
+  },
+  "updates": {
+    "fallbackToCacheTimeout": 0
+  },
+  "assetBundlePatterns": [
+    "**/*"
+  ],
+  "ios": {
+    "bundleIdentifier": "com.ppam.nille",
+    "googleServicesFile": "./google_services/GoogleService-Info.plist",
+    "supportsTablet": true
+  },
+  "android": {
+    "package_name": "com.ppam.nille",
+    "googleServicesFile": "./google_services/google-services.json",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#FFFFFF"
+    }
+  },
+  "web": {
+    "favicon": "./assets/favicon.png"
+  },
+  "plugins": [
+    "@react-native-google-signin/google-signin",
+    "@react-native-firebase/app",
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }
     ]
-  }
+  ]
 }
