@@ -10,7 +10,6 @@ const NewPasswordScreen = ({navigation}) => {
     //const navigation = useNavigation();   
 
     const onSubmitPressed  = () => {
-        console.warn('SendPressed');
         navigation.navigate('SignIn')
         //navigation.navigate('SignIn')
     };
@@ -45,15 +44,16 @@ const styles = StyleSheet.create({
     root: {
         alignItems: 'center',
         padding: 20,
+        backgroundColor:'#051630',
     },
     text : {
-        color: 'grey',
+        color: 'white',
         marginVertical: 10,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#051C60',
+        color: 'white',
         margin: 10,
     },
     link: {

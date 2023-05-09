@@ -1,45 +1,49 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import CustomButton from '../CustomButton/CustomButton'
-
+import { View, Text, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import CustomButton from '../CustomButton/CustomButton';
+import Google_Logo from '../../../assets/images/Google_Logo.png';
 
 
 const SocialSignInButtons = () => {
-    const onSignInFacebookPressed = () => {
-        console.warn('Sign in with Facebook');
-    };
-
     const onSignInGooglePressed = () => {
         console.warn('Sign in with Google');
     };
 
-    const onSignInApplePressed = () => {
-        console.warn('Sign in with Apple');
-    };
-
-
     return (
-        <>
-            <CustomButton 
-                text = 'Sign In with Facebook' 
-                onPress = {onSignInFacebookPressed} 
-                bgColor = '#E7EAF4'
-                fgColor = '#4765A9'    
-            /> 
-            <CustomButton 
-                text = 'Sign In with Google' 
-                onPress ={onSignInGooglePressed} 
-                bgColor = '#FAE9EA'
-                fgColor = '#DD4D44'
-            />
-            <CustomButton 
-                text = 'Sign In with Apple' 
-                onPress ={onSignInApplePressed} 
-                bgColor = '#e3e3e3'
-                fgColor = '#363636'    
-            />
+        <> 
+            <CustomButton
+                onPress={onSignInGooglePressed}
+                bgColor="white"
+                fgColor="#DD4D44"
+                type={"WITHICON"}
+                width={200}
+                icon={
+                    <Image
+                        source={Google_Logo}
+                        style={{ width: 30, height: 30, marginRight: 100 }}
+                        resizeMode='contain'
+                    />
+                }>
+                <View style={styles.buttonContent}>
+                  <Text style={styles.buttonText}>Sign In with Google</Text>
+                </View>
+            </CustomButton>
         </>
-  )
+  );
 };
+
+const styles = StyleSheet.create({
+    buttonContent: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonText: {
+      fontWeight: 'bold',
+      color: '#051630',
+      fontSize: 14,
+    },
+  });
 
 export default SocialSignInButtons;

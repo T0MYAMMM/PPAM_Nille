@@ -18,16 +18,30 @@ const CustomInput = ({value, setValue, placeholder, secureTextEntry}) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        width: '100%',
-
-        borderColor: '#e8e8e8',
+        borderColor: '#6EA9B1',
         borderWidth: 1,
-        borderRadius: 5,
-
+        borderRadius: 75,
         paddingHorizontal: 10,
-        marginVertical: 5,
+        marginVertical: 10,
+        
+
+        width: 300,
+        height: 50,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 100,
+        elevation: 5,
+      
     },
-    input: {},
+    input: {
+      textAlignVertical: 'center',
+      marginVertical:10,
+      marginLeft:10,
+    },
 
 });
 

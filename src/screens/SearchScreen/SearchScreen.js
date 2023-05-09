@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    alignItems:'center',
+    backgroundColor:'#051630',
   },
   searchBar: {
     flexDirection: 'row',
@@ -80,6 +82,26 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     marginBottom: 16,
+
+    backgroundColor: 'white',
+    borderColor: '#6EA9B1',
+    borderWidth: 1,
+    borderRadius: 75,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+    
+
+    width: "90%",
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 100,
+    elevation: 5,
+
   },
   searchInput: {
     marginLeft: 8,
@@ -90,8 +112,19 @@ const styles = StyleSheet.create({
   searchButton: {
     backgroundColor: '#007aff',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 75,
     alignItems: 'center',
+
+    width: "90%",
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 100,
+    elevation: 5,
   },
   searchButtonText: {
     fontSize: 18,
@@ -100,17 +133,21 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 16,
+    borderRadius:15,
+    width:"90%",
+    contentContainerStyle:{alignItems:'center'}
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 15,
     padding: 8,
     marginBottom: 8,
+    width:"100%",
   },
   cardImage: {
-    width: '50%',
+    width: '40%',
     height: 100,
     resizeMode: 'contain',
     marginRight: 8,
@@ -126,6 +163,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
     marginBottom: 25,
+    borderRadius:15,
   },
   cardDetails: {
     flexDirection: 'row',

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {SafeAreaView, StyleSheet, Text,} from 'react-native';
+import { AppLoading } from 'expo';
 //import SignInScreen from './src/screens/SignInScreen';
 //import SignUpScreen from './src/screens/SignUpScreen';
 //import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';

@@ -10,7 +10,6 @@ const ConfirmEmailScreen = ({navigation}) => {
     //const navigation = useNavigation(); 
     
     const onConfirmPressed  = () => {
-        console.warn('ConfirmPressed');
         navigation.navigate('Main');
     };
 
@@ -19,49 +18,48 @@ const ConfirmEmailScreen = ({navigation}) => {
     };
 
     const onBackToSignInPressed = () => {
-        console.warn('onBackToSignInPressed');
         navigation.navigate('SignIn');
     };
 
     return (
-        <ScrollView showsVerticalScrollIndicator={true}>
-            <View style={styles.root}>
-                <Text style = {styles.title}>Confirm Sign Up</Text>         
+        <View style={styles.root}>
+            <Text style = {styles.title}>Confirm Sign Up</Text>         
 
-                <CustomInput placeholder = "Enter your confirmation code" value = {code} setValue = {setCode}/>  
+            <CustomInput placeholder = "Enter your confirmation code" value = {code} setValue = {setCode}/>  
 
-                <CustomButton text = 'Confirm' onPress={onConfirmPressed} />
+            <CustomButton text = 'Confirm' onPress={onConfirmPressed} />
 
-                <CustomButton 
+            <CustomButton 
                     text = "Resend code" 
                     onPress={onResendCodePressed} 
                     type='SECONDARY'
-                />
+            />
 
-                <CustomButton 
-                    text = "Back to sign in" 
-                    onPress={onBackToSignInPressed} 
-                    type='TERTIARY'
-                />  
+            <CustomButton 
+                text = "Back to sign in" 
+                onPress={onBackToSignInPressed} 
+                type='TERTIARY'
+            />  
 
-            </View>
-        </ScrollView>
+        </View>
     );
  };
 
 const styles = StyleSheet.create({
     root: {
+        flex: 1,
         alignItems: 'center',
-        padding: 20,
+        backgroundColor:'#051630',
+        justifyContent: 'center',
     },
     text : {
-        color: 'grey',
+        color: 'white',
         marginVertical: 10,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#051C60',
+        color: 'white',
         margin: 10,
     },
     link: {

@@ -19,42 +19,42 @@ const ForgotPasswordScreen = ({navigation}) => {
     };
 
     return (
-        <ScrollView showsVerticalScrollIndicator={true}>
-            <View style={styles.root}>
-                <Text style = {styles.title}>Reset your password</Text>         
+        <View style={styles.root}>
+            <Text style = {styles.title}>Reset your password</Text>         
 
-                <CustomInput 
-                    placeholder = "Username" 
-                    value = {username} 
-                    setValue = {setUsername}
-                />  
+            <CustomInput 
+                placeholder = "Username" 
+                value = {username} 
+                setValue = {setUsername}
+            />  
 
-                <CustomButton text = 'Send' onPress={onSendPressed} />
+            <CustomButton text = 'Send' onPress={onSendPressed} />
 
-                <CustomButton   
-                    text = "Back to sign in" 
-                    onPress={onBackToSignInPressed} 
-                    type='TERTIARY'
-                />  
+            <CustomButton   
+                text = "Back to sign in" 
+                onPress={onBackToSignInPressed} 
+                type='TERTIARY'
+            />  
 
-            </View>
-        </ScrollView>
+        </View>
     );
  };
 
-const styles = StyleSheet.create({
+ const styles = StyleSheet.create({
     root: {
+        flex: 1,
         alignItems: 'center',
-        padding: 20,
+        backgroundColor:'#051630',
+        justifyContent: 'center',
     },
     text : {
-        color: 'grey',
+        color: 'white',
         marginVertical: 10,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#051C60',
+        color: 'white',
         margin: 10,
     },
     link: {
