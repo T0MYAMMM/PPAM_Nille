@@ -16,15 +16,6 @@ import NewPasswordScreen from '../screens/NewPasswordScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const HomeStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-      <Stack.Screen name="MyAquarium" component={MyAquariumScreen}></Stack.Screen>
-    </Stack.Navigator>
-  );
-};
-
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
@@ -50,19 +41,23 @@ const BottomTabNavigator = () => {
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-      })}
-      tabBarOptions={{
-        activeTintColor: '#051630',
-        inactiveTintColor: 'grey',
-        labelStyle: { padding: 10, fontSize: 10 },
-        style: { padding: 10, height: 70}
-      }}>
-
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Premium" component={PremiumScreen} />
-
-    </Tab.Navigator>
+        tabBarStyle: { 
+          height: 60,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+      },
+      activeTintColor: '#051630',
+      inactiveTintColor: 'grey',
+      tabStyle: { paddingBottom: 0, paddingTop: 0},
+      tabBarIconStyle: { marginVertical: 0 },
+      tabBarLabelStyle: { marginBottom: 10 }
+  })}
+>
+  <Tab.Screen name="Home" component={HomeScreen} />
+  <Tab.Screen name="Search" component={SearchScreen} />
+  <Tab.Screen name="Premium" component={PremiumScreen} />
+</Tab.Navigator>
   );
 };
 
