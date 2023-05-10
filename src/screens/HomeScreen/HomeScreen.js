@@ -14,8 +14,9 @@ const HomeScreen = () => {
     
     return (
       <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
-        <Text style={styles.titleText}>Welcome to Nille</Text>
+        <Text style={styles.titleText}>Feed your fish</Text>
 
+        <Text style={{ fontSize: 18, color: 'white', fontWeight: 'normal', textAlign:'center', paddingTop:10, paddingBottom:20}}> Disini ada upcoming to do </Text>
 
         <View style={styles.itemsContainer}>
           <TouchableOpacity style={styles.item}>
@@ -45,13 +46,31 @@ const HomeScreen = () => {
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/clown_fish.jpg')} style={styles.itemImage} resizeMode='contain' />
             <Text style={styles.itemTitle}>Clown fish</Text>
-            <Text style={styles.itemPrice}>$19.99</Text>
+            <Text style={styles.itemPrice}>$39.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/koi.jpg')} style={styles.itemImage} resizeMode='contain' />
             <Text style={styles.itemTitle}>Koi</Text>
-            <Text style={styles.itemPrice}>$12.99</Text>
+            <Text style={styles.itemPrice}>$123.99</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item}>
+            <Image source={require('../../../assets/images/goldfish.jpg')} style={styles.itemImage} resizeMode='contain' />
+            <Text style={styles.itemTitle}>Gold Fish</Text>
+            <Text style={styles.itemPrice}>$23.99</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item}>
+            <Image source={require('../../../assets/images/kakap.jpg')} style={styles.itemImage} resizeMode='contain' />
+            <Text style={styles.itemTitle}>kakap</Text>
+            <Text style={styles.itemPrice}>$9.99</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item}>
+            <Image source={require('../../../assets/images/gabus.jpg')} style={styles.itemImage} resizeMode='contain' />
+            <Text style={styles.itemTitle}>Gabus</Text>
+            <Text style={styles.itemPrice}>$3.99</Text>
           </TouchableOpacity>
         </View>
         <View alignItems='center' marginBottom={30} >
@@ -82,7 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center', 
     color: 'white',
-    padding:20,
+    paddingTop:20,
   },
   logo : {
     width: '100%',
