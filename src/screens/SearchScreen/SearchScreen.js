@@ -60,8 +60,8 @@ const SearchScreen = () => {
             virtualizedList={true} // Menambahkan properti virtualizedList
           />
         ) : (
-          <View style={styles.emptyResultContainer}>
-            <Text style={styles.emptyResultText}>No results found.</Text>
+          <View style={{padding:10}}>
+            <Text style={{color: 'white', fontWeight:'bold', fontSize:24}}>No results found.</Text>
           </View>
         )}
       </View>

@@ -7,7 +7,7 @@ import CustomButton from '../../components/CustomButton/CustomButton';
 function MyAquariumScreen(){
     const navigation = useNavigation();
     const onLogoutPressed = () => {
-      console.warn("kamu mencet tombol");
+      console.warn("Sabar ya fiturnya lagi di develop");
     };
 
     return (

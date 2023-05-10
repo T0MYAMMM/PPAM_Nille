@@ -1,20 +1,20 @@
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import React, {useState} from 'react';
-import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { app } from '../../../firebaseConfig';
 
-
-const ConfirmEmailScreen = ({navigation}) => {
-    const [code, setCode] = useState('');
-    //const navigation = useNavigation(); 
+const ConfirmEmailScreen = () => {
+    const navigation = useNavigation();
     
-    const onConfirmPressed  = () => {
-        navigation.navigate('Main');
-    };
-
-    const onResendCodePressed = () => {
-        console.warn('onResendCodePressed');
+    const onResendCodePressed = async () => {
+        try {
+            const user = app.auth().currentUser;
+            await user.sendEmailVerification();
+            alert('Email verifikasi telah dikirim ulang ke alamat email Anda');
+        } catch (error) {
+            alert(error.message);
+        }
     };
 
     const onBackToSignInPressed = () => {
@@ -23,27 +23,21 @@ const ConfirmEmailScreen = ({navigation}) => {
 
     return (
         <View style={styles.root}>
-            <Text style = {styles.title}>Confirm Sign Up</Text>         
-
-            <CustomInput placeholder = "Enter your confirmation code" value = {code} setValue = {setCode}/>  
-
-            <CustomButton text = 'Confirm' onPress={onConfirmPressed} />
-
+            <Text style={styles.title}>Konfirmasi Email</Text>         
+            <Text style={styles.text}>Silakan buka email Anda dan klik tautan verifikasi untuk menyelesaikan proses pendaftaran akun.</Text>
             <CustomButton 
-                    text = "Resend code" 
-                    onPress={onResendCodePressed} 
-                    type='SECONDARY'
+                text = "Kirim Ulang Email Verifikasi" 
+                onPress={onResendCodePressed} 
+                type='SECONDARY'
             />
-
             <CustomButton 
-                text = "Back to sign in" 
+                text = "Kembali ke Halaman Login" 
                 onPress={onBackToSignInPressed} 
                 type='TERTIARY'
             />  
-
         </View>
     );
- };
+};
 
 const styles = StyleSheet.create({
     root: {
@@ -55,16 +49,18 @@ const styles = StyleSheet.create({
     text : {
         color: 'white',
         marginVertical: 10,
+        textAlign: 'center',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
         margin: 10,
+        textAlign: 'center',
     },
     link: {
         color: '#FDB075',
     },
 });
 
-export default ConfirmEmailScreen; 
+export default ConfirmEmailScreen;

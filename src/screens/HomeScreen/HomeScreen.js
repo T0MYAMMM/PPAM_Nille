@@ -20,37 +20,37 @@ const HomeScreen = () => {
         <View style={styles.itemsContainer}>
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/tuna.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Pothos</Text>
+            <Text style={styles.itemTitle}>Tuna</Text>
             <Text style={styles.itemPrice}>$14.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/sardines.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Spider plant</Text>
+            <Text style={styles.itemTitle}>Sardines</Text>
             <Text style={styles.itemPrice}>$10.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/mackerel.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Fiddle leaf fig</Text>
+            <Text style={styles.itemTitle}>Mackerel</Text>
             <Text style={styles.itemPrice}>$24.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/betta.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Peace lily</Text>
+            <Text style={styles.itemTitle}>Betta Fish</Text>
             <Text style={styles.itemPrice}>$9.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/clown_fish.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Rubber plant</Text>
+            <Text style={styles.itemTitle}>Clown fish</Text>
             <Text style={styles.itemPrice}>$19.99</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item}>
             <Image source={require('../../../assets/images/koi.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Snake plant</Text>
+            <Text style={styles.itemTitle}>Koi</Text>
             <Text style={styles.itemPrice}>$12.99</Text>
           </TouchableOpacity>
         </View>

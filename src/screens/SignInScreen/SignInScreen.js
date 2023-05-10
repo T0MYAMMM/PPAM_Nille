@@ -4,14 +4,34 @@ import Logo from '../../../assets/images/login_logo.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
+//import firebase from '../../../firebaseConfig';
+import { app } from '../../../firebaseConfig';
 
 const SignInScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {height} = useWindowDimensions();   
 
-    const onSignInPressed = () => {
-        navigation.navigate('Main');
+    const loginUser = async (username, password) => {
+        try {
+            const userCredential = await app.auth().signInWithEmailAndPassword(username, password);
+            return userCredential.user;
+          } catch (error) {
+            throw error;
+          }
+        };
+
+    const onSignInPressed = async () => {
+        try {
+            const user = await loginUser(username, password);
+            console.log('User signed in:', user);
+            navigation.navigate('Main');
+            } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Wrong Password');
+            console.log(errorMessage)
+            }
     };
     const onForgotPasswordPressed = () => {
         navigation.navigate('ForgotPassword');
@@ -20,6 +40,7 @@ const SignInScreen = ({navigation}) => {
         navigation.navigate('SignUp');
     };
 
+    
     return (
         <ScrollView showsVerticalScrollIndicator={true}>
             <View style={styles.root}>

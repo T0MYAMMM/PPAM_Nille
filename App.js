@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import {SafeAreaView, StyleSheet, Text,} from 'react-native';
 import { AppLoading } from 'expo';
-//import SignInScreen from './src/screens/SignInScreen';
-//import SignUpScreen from './src/screens/SignUpScreen';
-//import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';
-//import ConfirmEmailScreen from './src/screens/ConfirmEmailScreen/ConfirmEmailScreen';
-//import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen/ForgotPasswordScreen';
-//import StackNavigator from './src/navigation/StackNavigator';
-//import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 import AppNavigator from './src/navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 

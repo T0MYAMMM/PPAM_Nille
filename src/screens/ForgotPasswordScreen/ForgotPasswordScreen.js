@@ -2,19 +2,21 @@ import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-n
 import React, {useState} from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import { app } from '../../../firebaseConfig';
 
 const ForgotPasswordScreen = ({navigation}) => {
-    const [username, setUsername] = useState('');
-    //const navigation = useNavigation();   
+    const [email, setEmail] = useState('');   
     
-    const onSendPressed  = () => {
-        //console.warn('SendPressed');
-        navigation.navigate('NewPassword');
+    const onSendPressed  = async () => {
+        try {
+          await app.auth().sendPasswordResetEmail(email);
+          navigation.navigate('ResetPassword', { email: email });
+        } catch (error) {
+          alert(error.message);
+        }
     };
 
     const onBackToSignInPressed = () => {
-        //console.warn('onBackToSignInPressed');
         navigation.navigate('SignIn');
     };
 
@@ -23,9 +25,9 @@ const ForgotPasswordScreen = ({navigation}) => {
             <Text style = {styles.title}>Reset your password</Text>         
 
             <CustomInput 
-                placeholder = "Username" 
-                value = {username} 
-                setValue = {setUsername}
+                placeholder = "Email" 
+                value = {email} 
+                setValue = {setEmail}
             />  
 
             <CustomButton text = 'Send' onPress={onSendPressed} />
@@ -57,9 +59,6 @@ const ForgotPasswordScreen = ({navigation}) => {
         color: 'white',
         margin: 10,
     },
-    link: {
-        color: '#FDB075',
-    },
 });
 
-export default ForgotPasswordScreen; 
+export default ForgotPasswordScreen;

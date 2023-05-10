@@ -1,22 +1,31 @@
-//import * as firebase from 'firebase/compat/app'
-//import 'firebase/auth';
-//import 'firebase/firestore';
-//import firebase from '../firebase'
+import firebase from "firebase/compat/app";
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+//import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
-//const firebaseConfig = {
-  // Isi dengan konfigurasi Firebase Anda
-//  apiKey: "",
-//  authDomain: "",
-//  databaseURL: "",
-//  projectId: "",
-//  storageBucket: "",
-//  messagingSenderId: "",
-//  appId: "",
-//  measurementId: "",
-//};
+const firebaseConfig = {
+  apiKey: "AIzaSyD_eo_Pa9XW1U4vO_sJQwnm2x2IcQBZf2k",
+  authDomain: "nille-14a1f.firebaseapp.com",
+  projectId: 'nille-14a1f',
+  storage_bucket: "nille-14a1f.appspot.com",
+};
 
-//if (!firebase.apps.length) {
-//  firebase.initializeApp(firebaseConfig);
-//}
+//const app = initializeApp(firebaseConfig);
+  // initialize firebase
+let app;
 
-//export { firebase };
+if(!firebase.apps.length) {
+    app = firebase.initializeApp(firebaseConfig);
+}
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { app, auth, db, storage };
+
+//export default app;
+

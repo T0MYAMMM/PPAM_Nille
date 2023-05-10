@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "265283661516",
+    "project_id": "nille-14a1f",
+    "storage_bucket": "nille-14a1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265283661516:android:99f741389e910b79f71c69",
+        "android_client_info": {
+          "package_name": "com.NilleInc.Nille"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265283661516-8tmn1ejm6mbk2gpe8b9bopmcvktdr4pj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_eo_Pa9XW1U4vO_sJQwnm2x2IcQBZf2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265283661516-8tmn1ejm6mbk2gpe8b9bopmcvktdr4pj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

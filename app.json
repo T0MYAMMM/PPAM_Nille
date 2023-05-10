@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Authentication5",
-    "slug": "Authentication5",
+    "name": "Nille_trial",
+    "slug": "Nille_trial",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,7 +24,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     }
   }
 }

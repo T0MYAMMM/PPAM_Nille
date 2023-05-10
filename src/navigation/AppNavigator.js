@@ -13,7 +13,7 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import NewPasswordScreen from '../screens/NewPasswordScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import AIScreen from '../screens/AIScreen/AIScreen';
 import GetStartedScreen from '../screens/GetStartedScreen/GetStartedScreen';
 
@@ -80,7 +80,7 @@ const AppNavigator = () => {
         <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
         <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>
-        <Stack.Screen name="NewPassword" component={NewPasswordScreen}></Stack.Screen>
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
         <Stack.Screen name="Main" component={BottomTabNavigator}></Stack.Screen>
       </Stack.Navigator>
   );

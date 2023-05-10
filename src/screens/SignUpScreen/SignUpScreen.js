@@ -1,21 +1,75 @@
-import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import React, {useState} from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons';
-import { useNavigation } from '@react-navigation/native';
+import { app } from '../../../firebaseConfig';
 
 const SignUpScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
-    //const navigation = useNavigation();   
 
-    const onRegisterPressed  = () => {
-        //console.warn('Sign Up');
-        navigation.navigate('ConfirmEmail');
+    const registerUser = async (email, password) => {
+        try {
+          const userCredential = await app.auth().createUserWithEmailAndPassword(email, password);
+          const user = userCredential.user;
+    
+          await user.updateProfile({
+            displayName: username
+          });
+    
+          return user;
+        } catch (error) {
+          throw error;
+        }
     };
+
+    const onRegisterPressed  = async () => {
+        try {
+            validateForm();
+            await registerUser(email, password);
+            await app.auth().currentUser.sendEmailVerification();
+            navigation.navigate('ConfirmEmail');
+        } catch (error) {
+          alert(error.message);
+        }
+    };
+
+    const isValidEmail = (email) => {
+        // Regex untuk memvalidasi email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Mengembalikan true jika email valid
+        return emailRegex.test(email);
+    };
+      
+    const isValidPassword = (password) => {
+        // Regex untuk memvalidasi password
+        // Minimal 8 karakter, setidaknya 1 huruf besar, 1 huruf kecil, dan 1 angka
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+        
+        // Mengembalikan true jika password valid
+        return passwordRegex.test(password);
+    };
+
+    const validateForm = () => {
+        if (!username || !email || !password || !passwordRepeat) {
+          throw new Error('All fields are required');
+        }
+        if (!isValidEmail(email)) {
+          throw new Error('Invalid email address');
+        }
+        if (!isValidPassword(password)) {
+          throw new Error('Invalid password');
+        }
+        if (password !== passwordRepeat) {
+          throw new Error('Passwords do not match');
+        }
+        return true;
+    };
+
     const onTermsOfUsePressed = () => {
         console.warn('onTermsOfUsePressed');
     };
@@ -23,7 +77,6 @@ const SignUpScreen = ({navigation}) => {
         console.warn('onPrivacyPolicyPressed');
     };
     const onHaveAccountPressed = () => {
-        //console.warn('onHaveAccountPressed');
         navigation.navigate('SignIn');
     };
 
@@ -68,7 +121,7 @@ const SignUpScreen = ({navigation}) => {
                      <Text style = {styles.link} onPress={onPrivacyPolicyPressed}>Privacy Policy</Text>  
                 </Text>
 
-                <SocialSignInButtons/> 
+                <SocialSignInButtons/>
 
                 <CustomButton 
                     text = "Have an account? Sign In" 
