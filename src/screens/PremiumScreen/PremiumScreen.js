@@ -57,7 +57,7 @@ const PremiumScreen = () => {
         {fishData.map((url, index) => (
           <TouchableOpacity key={index} style={styles.item}>
             <Image source={{ uri: url }} style={styles.itemImage} resizeMode="contain" />
-            <Text style={styles.itemTitle}>Fish {index + 1}</Text>
+            <Text style={styles.itemTitle}>File {index + 1}</Text>
           </TouchableOpacity>
         ))}
       </View>
