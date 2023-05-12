@@ -1,81 +1,79 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../../components/CustomButton/CustomButton';
-//const LogoImage = require(Logo)
+import { getAuth, signOut } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
-    
+
+    const handleLogout = async () => {
+      try {
+        // Hapus token autentikasi dari penyimpanan lokal (AsyncStorage)
+        const auth = getAuth();
+        await signOut(auth);
+        await AsyncStorage.removeItem('authToken');
+        // Menghapus currentUser atau menetapkannya sebagai null
+        //auth.currentUser = null;
+  
+        // Navigasi ke halaman login
+        navigation.navigate('SignIn');
+      } catch (error) {
+        console.log('Error logging out:', error);
+      }
+    };
+
+    const onLogoutPressed = () => {
+      handleLogout();
+    }
+      
     return (
-      <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
-        <Text style={styles.titleText}>Welcome to Nille</Text>
+      <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.titleText}>Welcome to Nille</Text>
 
-        <Text style={styles.subTitleText}> Disini ada upcoming to do </Text>
+          <Text style={styles.subTitleText}> Disini ada upcoming to do </Text>
 
+          <CustomButton
+            text={"Logout"}
+            width={'80%'}
+            type='LIGHT'
+            padding={12}
+            height={50}
+            onPress={onLogoutPressed}
+          />
+        </View>     
       </ScrollView>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    contentContainerStyle:{
-      alignItems: 'center',
-      justifyContent: 'center',
+    container: {
+      flexGrow: 1,
+      padding: 20,
+      backgroundColor:'#051630',
     },
-    padding: 20,
-    backgroundColor:'#051630',
-  },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center', 
-    color: 'white',
-    paddingTop:20,
-  },
-  subTitleText : {
-    fontSize: 16, 
-    color: 'white', 
-    fontWeight: 'normal', 
-    textAlign:'center', 
-    paddingTop:10, 
-    paddingBottom:20,
-  },
-  itemsContainer: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 5,
-  },
-  item: {
-    backgroundColor: '#fff',
-    width: '31%',
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  itemImage: {
-    width: '50%',
-    height: 100,
-    resizeMode: 'contain',
-    marginRight: 8,
-    marginHorizontal:25,
-  },
-  itemTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    textAlign:'center',
-  },
-  itemPrice: {
-    fontSize: 14,
-    color: '#051630',
-    textAlign:'center',
-    paddingBottom:10,
-  },
+    content: {
+      alignItems:'center',
+      justifyContent:'center',
+    },
+    titleText: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      textAlign: 'center', 
+      color: 'white',
+      paddingTop:20,
+    },
+    subTitleText : {
+      fontSize: 16, 
+      color: 'white', 
+      fontWeight: 'normal', 
+      textAlign:'center', 
+      paddingTop:10, 
+      paddingBottom:20,
+    },
 });
 
-export default HomeScreen;
+  export default HomeScreen;

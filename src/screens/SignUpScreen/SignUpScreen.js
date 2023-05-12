@@ -10,31 +10,51 @@ const SignUpScreen = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isEmailRegistered, setIsEmailRegistered] = useState(false);
 
     const registerUser = async (email, password) => {
         try {
+          const signInMethods = await app.auth().fetchSignInMethodsForEmail(email);
+          if (signInMethods && signInMethods.length > 0) {
+            setIsEmailRegistered(true);
+            return null;
+          }
+    
           const userCredential = await app.auth().createUserWithEmailAndPassword(email, password);
           const user = userCredential.user;
     
           await user.updateProfile({
             displayName: username
           });
-    
           return user;
         } catch (error) {
+          //console.error(error);
           throw error;
         }
     };
-
-    const onRegisterPressed  = async () => {
+    
+    const onRegisterPressed = async () => {
         try {
-            validateForm();
-            await registerUser(email, password);
-            await app.auth().currentUser.sendEmailVerification();
+          validateForm();
+          const newUser = await registerUser(email, password);
+    
+          if (newUser != null) {
             navigation.navigate('ConfirmEmail');
+          }
+    
         } catch (error) {
-          alert(error.message);
-        }m
+          //console.error(error);
+          if (isEmailRegistered) {
+            setErrorMessage('This email is already registered');
+          } else if (error.code === 'auth/invalid-email') {
+            setErrorMessage('Invalid email');
+          } else {
+            setErrorMessage(error.message);
+          }
+        } finally {
+          setIsEmailRegistered(false);
+        }
     };
 
     const isValidEmail = (email) => {
@@ -56,16 +76,16 @@ const SignUpScreen = ({navigation}) => {
 
     const validateForm = () => {
         if (!username || !email || !password || !passwordRepeat) {
-          throw new Error('All fields are required');
+            throw new Error('All fields are required');
         }
         if (!isValidEmail(email)) {
-          throw new Error('Invalid email address');
+            throw new Error('Invalid email address');
         }
         if (!isValidPassword(password)) {
-          throw new Error('Invalid password');
+            throw new Error('Invalid password');
         }
         if (password !== passwordRepeat) {
-          throw new Error('Passwords do not match');
+            throw new Error('Passwords do not match');
         }
         return true;
     };
@@ -112,6 +132,10 @@ const SignUpScreen = ({navigation}) => {
                     secureTextEntry
                     width={'80%'}
                 />  
+
+                <View>
+                    {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
+                </View>
 
                 <CustomButton 
                     text = 'Register' 
@@ -168,6 +192,13 @@ const styles = StyleSheet.create({
     },
     link: {
         color: '#FDB075',
+    },
+    errorText: {
+        color: '#fa5e2a',
+        marginHorizontal:40,
+        marginBottom:10,
+        textAlign: 'center',
+        fontWeight:'bold',
     },
 });
 

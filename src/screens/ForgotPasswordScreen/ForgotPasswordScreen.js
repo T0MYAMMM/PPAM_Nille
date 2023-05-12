@@ -2,17 +2,32 @@ import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-n
 import React, {useState} from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from '../../../firebaseConfig';
 
 const ForgotPasswordScreen = ({navigation}) => {
     const [email, setEmail] = useState('');   
-    
+    const [errorMessage, setErrorMessage] = useState('');
+
     const onSendPressed  = async () => {
         try {
+          console.log(app)
           await app.auth().sendPasswordResetEmail(email);
-          navigation.navigate('ResetPassword', { email: email });
+
+          alert('Berhasil kirim reset password');
+          navigation.navigate("SignIn")
+
+          //navigation.navigate('ResetPassword', { email: email });
         } catch (error) {
-          alert(error.message);
+          if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+              setErrorMessage('Username or password doesn\'t match');
+          } else if (error.code === 'auth/invalid-email') {
+              setErrorMessage('Invalid email')
+          } else if (error.code === 'auth/too-many-requests') {
+              setErrorMessage('Access has been temporarily disabled. Please reset your password to restore access, or try again later.');
+          } else {
+              setErrorMessage(error.code);
+          }
         }
     };
 
@@ -21,21 +36,29 @@ const ForgotPasswordScreen = ({navigation}) => {
     };
 
     return (
-        <View style={styles.root}>
+        <View style={styles.container}>
             <Text style = {styles.title}>Reset your password</Text>         
 
             <CustomInput 
                 placeholder = "Email" 
                 value = {email} 
                 setValue = {setEmail}
-            />  
+            />
 
-            <CustomButton text = 'Send' onPress={onSendPressed} />
+            {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}  
+
+            <CustomButton 
+                text = 'Send' 
+                onPress={onSendPressed} 
+                type='LIGHT'
+                marginVertical={5}
+            />
 
             <CustomButton   
                 text = "Back to sign in" 
                 onPress={onBackToSignInPressed} 
-                type='TERTIARY'
+                type='TEXT'
+                marginVertical={5}
             />  
 
         </View>
@@ -43,11 +66,12 @@ const ForgotPasswordScreen = ({navigation}) => {
  };
 
  const styles = StyleSheet.create({
-    root: {
+    container: {
         flex: 1,
         alignItems: 'center',
         backgroundColor:'#051630',
         justifyContent: 'center',
+        padding:20
     },
     text : {
         color: 'white',
@@ -58,6 +82,13 @@ const ForgotPasswordScreen = ({navigation}) => {
         fontWeight: 'bold',
         color: 'white',
         margin: 10,
+    },
+    errorText: {
+        color: '#fa5e2a',
+        marginHorizontal:40,
+        marginBottom:10,
+        textAlign: 'center',
+        fontWeight:'bold',
     },
 });
 

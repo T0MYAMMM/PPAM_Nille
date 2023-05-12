@@ -14,7 +14,7 @@ const GetStartedScreen = ({navigation}) => {
     };
 
     return (
-        <View style={styles.root}>
+        <View style={styles.container}>
             <Image 
                 source={Logo} 
                 style={[styles.logo, {height:  height * 0.3}]} 
@@ -43,24 +43,27 @@ const GetStartedScreen = ({navigation}) => {
                 fontSize={16}
                 marginVertical={5}
             />  
-            <View style={styles.space}/>
+            
         </View>
     );
  };
 
 const styles = StyleSheet.create({
-    root: {
+    container: {
+        flex:1,
         alignItems: 'center',
+        justifyContent:'center',
         padding: 20,
         backgroundColor:'#051630',
     },
     logo : {
+        flexDirection:'column',
         width: '70%',
         maxWidth: 300,
         maxHeight: 300,
     },
     space: {
-        height: 300,
+        height: 250,
     },
 });
 

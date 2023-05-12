@@ -2,45 +2,57 @@ import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-n
 import React, {useState} from 'react';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from '../../../firebaseConfig';
 
 const ConfirmEmailScreen = () => {
     const navigation = useNavigation();
-    
+    const auth = getAuth();
+    const [errorMessage, setErrorMessage] = useState('');
+
     const onResendCodePressed = async () => {
         try {
-            const user = app.auth().currentUser;
+            const user = auth.currentUser;
             await user.sendEmailVerification();
             alert('Email verifikasi telah dikirim ulang ke alamat email Anda');
+            navigation.navigate('SignIn');
         } catch (error) {
-            alert(error.message);
+            if (error.code === 'auth/invalid-email' || error.code === 'auth/user-not-found') {
+                setErrorMessage('Invalid email')
+            } else {
+                setErrorMessage(error.code);
+            }
         }
     };
 
     const onBackToSignInPressed = () => {
+        auth.currentUser = null;
         navigation.navigate('SignIn');
     };
 
     return (
-        <View style={styles.root}>
+        <View style={styles.container}>
             <Text style={styles.title}>Konfirmasi Email</Text>         
             <Text style={styles.text}>Silakan buka email Anda dan klik tautan verifikasi untuk menyelesaikan proses pendaftaran akun.</Text>
+            {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
             <CustomButton 
                 text = "Kirim Ulang Email Verifikasi" 
                 onPress={onResendCodePressed} 
-                type='SECONDARY'
+                type='LIGHT'
+                padding={12}
             />
             <CustomButton 
                 text = "Kembali ke Halaman Login" 
                 onPress={onBackToSignInPressed} 
-                type='TERTIARY'
+                type='TEXT'
+                marginVertical={1}
             />  
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    root: {
+    container: {
         flex: 1,
         alignItems: 'center',
         backgroundColor:'#051630',
@@ -58,8 +70,12 @@ const styles = StyleSheet.create({
         margin: 10,
         textAlign: 'center',
     },
-    link: {
-        color: '#FDB075',
+    errorText: {
+        color: '#fa5e2a',
+        marginHorizontal:40,
+        marginBottom:10,
+        textAlign: 'center',
+        fontWeight:'bold',
     },
 });
 
