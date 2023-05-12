@@ -10,3 +10,23 @@ Nille : The Ocean in Your Pocket
 - @react-navigation/native
 - @react-navigation/stack
 - @react-navigation/bottom_tabs
+- firebase
+- moment
+- axios
+- @expo/vector-icons
+
+### Features 
+~[done]
+1. Authentication (Sign Up, SignIn, Firebase authentication)
+2. Search (Firebase storage, Firebase realtime database)
+3. Upload Image (Firebase storage)
+
+~[on progress]
+1. Authentication (Forgot password, Firebase authentication)
+2. MyAquarium (Firebase realtime database)
+3. Notification & Alarm
+
+~[coming soon]
+1. Premium (Multiple sites, Full version databases)  
+2. ChatBot
+3. FishScanner
