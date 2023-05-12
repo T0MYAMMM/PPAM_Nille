@@ -8,79 +8,13 @@ import CustomButton from '../../components/CustomButton/CustomButton';
 const HomeScreen = () => {
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
-    const onLogoutPressed = () => {
-        navigation.navigate('SignIn');
-    };
     
     return (
       <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
-        <Text style={styles.titleText}>Feed your fish</Text>
+        <Text style={styles.titleText}>Welcome to Nille</Text>
 
-        <Text style={{ fontSize: 18, color: 'white', fontWeight: 'normal', textAlign:'center', paddingTop:10, paddingBottom:20}}> Disini ada upcoming to do </Text>
+        <Text style={styles.subTitleText}> Disini ada upcoming to do </Text>
 
-        <View style={styles.itemsContainer}>
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/tuna.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Tuna</Text>
-            <Text style={styles.itemPrice}>$14.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/sardines.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Sardines</Text>
-            <Text style={styles.itemPrice}>$10.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/mackerel.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Mackerel</Text>
-            <Text style={styles.itemPrice}>$24.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/betta.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Betta Fish</Text>
-            <Text style={styles.itemPrice}>$9.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/clown_fish.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Clown fish</Text>
-            <Text style={styles.itemPrice}>$39.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/koi.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Koi</Text>
-            <Text style={styles.itemPrice}>$123.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/goldfish.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Gold Fish</Text>
-            <Text style={styles.itemPrice}>$23.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/kakap.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>kakap</Text>
-            <Text style={styles.itemPrice}>$9.99</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item}>
-            <Image source={require('../../../assets/images/gabus.jpg')} style={styles.itemImage} resizeMode='contain' />
-            <Text style={styles.itemTitle}>Gabus</Text>
-            <Text style={styles.itemPrice}>$3.99</Text>
-          </TouchableOpacity>
-        </View>
-        <View alignItems='center' marginBottom={30} >
-          <CustomButton
-            type='PRIMARY'
-            text='Logout'
-            width={250}
-            onPress={onLogoutPressed}
-          />
-        </View>
       </ScrollView>
   );
 };
@@ -103,10 +37,13 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingTop:20,
   },
-  logo : {
-    width: '100%',
-    alignItems:'center',
-    justifyContent: 'center',
+  subTitleText : {
+    fontSize: 16, 
+    color: 'white', 
+    fontWeight: 'normal', 
+    textAlign:'center', 
+    paddingTop:10, 
+    paddingBottom:20,
   },
   itemsContainer: {
     flexWrap: 'wrap',

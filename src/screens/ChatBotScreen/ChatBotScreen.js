@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import Logo from '../../../assets/images/nille_logo.png';
 
-const AIScreen = () => {
+const ChatBotScreen = () => {
     return (
       <View style={styles.container}>
         <Image 
@@ -46,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AIScreen;
+export default ChatBotScreen;

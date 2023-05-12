@@ -1,12 +1,15 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 
-const CustomButton = ({onPress, text, type="PRIMARY", bgColor, fgColor, width, fontWeight, icon}) => {
+const CustomButton = ({onPress, text, type="DARK", fontSize, bgColor, color, width, height, fontWeight, padding, icon, marginVertical}) => {
     const containerStyle = [
       styles.container,
       styles[`container_${type}`],
       bgColor ? { backgroundColor: bgColor } : {},
-      width ? { width: width } : {}  
+      width ? { width: width } : {},
+      height ? { height: height } : {},
+      padding ? { padding: padding } : {},
+      marginVertical ? { marginVertical: marginVertical } : {},  
     ];
 
     const iconElement = React.isValidElement(icon) ? (
@@ -22,8 +25,9 @@ const CustomButton = ({onPress, text, type="PRIMARY", bgColor, fgColor, width, f
                 <Text style={[
                     styles.text,
                     styles[`text_${type}`],
-                    fgColor ? { color: fgColor } : {},
-                    fontWeight
+                    color ? { color: color } : {},
+                    fontWeight ? { fontWeight: fontWeight } : {},
+                    fontSize ? { fontSize: fontSize } : {},
                 ]}>
                     {text}
                 </Text>
@@ -34,17 +38,16 @@ const CustomButton = ({onPress, text, type="PRIMARY", bgColor, fgColor, width, f
 
 const styles = StyleSheet.create({
     container: {
-        padding: 15,
-        marginVertical: 5,
-
         alignItems: 'center',
-        borderRadius: 5,
+        width:'80%',
+        height:50,
+        padding: 12,
+        marginVertical: 15,
+        borderRadius: 75,
     },
 
-    container_PRIMARY: {
-        width: 300,
-        backgroundColor: '#051630',
-        borderRadius: 75,
+    container_LIGHT: {
+        backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -55,22 +58,11 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderWidth:2,
         borderColor: 'white',
-        marginVertical:12,
+        borderWidth:2,
     },
 
-    container_SECONDARY: {
-        borderColor: '#3B71F3',
-        borderWidth:2, 
-    },
-    
-    container_TERTIARY: {
-
-    },
-
-    container_GETSTARTED: {
-        width: 200,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 75,
+    container_DARK: {
+        backgroundColor: '#051630',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -79,6 +71,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 100,
         elevation: 5,
+        borderColor: 'white',
+        borderWidth:2,
+    },
+
+    container_TEXT: {
+       
     },
     
     container_WITHICON: {
@@ -97,25 +95,23 @@ const styles = StyleSheet.create({
 
     text: {
         fontWeight: 'bold',
+        fontSize: 16,
+    },
+
+    text_DARK: {
+        color: 'white',
+        fontSize: 16,
+    },
+    text_LIGHT: {
+        color: '#051630',
+        fontSize: 16,
+    },
+
+    text_TEXT: {
+        fontWeight:'normal',
         color: 'white',
     },
 
-    text_SECONDARY: {
-        color: '#FFFFFF',
-    },
-
-    text_TERTIARY: {
-        color: '#FFFFFF',
-    },
-
-    text_GETSTARTED: {
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        color: '#051630',
-        textAlign: 'center',
-        textAlignVertical: 'center',
-    },
-    
     iconContainer: {
 
     },

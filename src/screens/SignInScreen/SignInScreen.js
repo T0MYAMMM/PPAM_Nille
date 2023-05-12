@@ -4,22 +4,28 @@ import Logo from '../../../assets/images/login_logo.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
-//import firebase from '../../../firebaseConfig';
-import { app } from '../../../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebaseConfig';
 
 const SignInScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {height} = useWindowDimensions();   
+    const auth = getAuth();
+    console.log(auth)
 
     const loginUser = async (username, password) => {
+        console.log(username);
+        console.log(password);
         try {
-            const userCredential = await app.auth().signInWithEmailAndPassword(username, password);
-            return userCredential.user;
-          } catch (error) {
-            throw error;
-          }
-        };
+          const userCredential = await signInWithEmailAndPassword(auth, username, password);
+          console.log(userCredential.user);
+          return userCredential.user;
+          
+        } catch (error) {
+          throw error;
+        }
+      };
 
     const onSignInPressed = async () => {
         try {
@@ -53,6 +59,7 @@ const SignInScreen = ({navigation}) => {
                     placeholder = "Username"
                     value = {username}
                     setValue = {setUsername}
+                    width={'80%'}
                 />
 
                 <CustomInput
@@ -62,26 +69,31 @@ const SignInScreen = ({navigation}) => {
                     secureTextEntry
                 />  
 
-                <CustomButton text = 'Sign In' onPress={onSignInPressed} />
+                <CustomButton 
+                    text = 'Sign In' 
+                    onPress={onSignInPressed} 
+                    type='LIGHT'
+                    width={'80%'}
+                    height={50}
+                    padding={12}    
+                />
 
                 <CustomButton 
                     text = 'Forgot password?' 
                     onPress={onForgotPasswordPressed} 
-                    type='TERTIARY'
+                    type='TEXT'
+                    fontSize={16}
                 />
 
                 <SocialSignInButtons/>
 
-                <View style={styles.space}/>
-
                 <CustomButton 
                     text = "Don't have an account? create one" 
                     onPress={onSignUpPressed} 
-                    type='TERTIARY'
+                    type='TEXT'
+                    color={'white'}
+                    fontSize={16}
                 />  
-
-                <View style={styles.space}/>
-
             </View>
         </ScrollView>
     );
@@ -97,9 +109,6 @@ const styles = StyleSheet.create({
         width: '70%',
         maxWidth: 300,
         maxHeight: 300,
-    },
-    space: {
-        height: 50,
     },
 });
 

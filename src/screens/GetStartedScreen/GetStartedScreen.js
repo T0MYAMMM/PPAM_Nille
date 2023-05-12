@@ -27,17 +27,21 @@ const GetStartedScreen = ({navigation}) => {
                 text = 'Get Started With Nille' 
                 bgColor={'white'} 
                 width={250} 
-                fgColor={'#051630'} 
+                color={'#051630'} 
                 onPress={onStartedPressed}
-                type={'GETSTARTED'}
+                type={'LIGHT'}
+                fontSize={16}
+                marginVertical={5}
             />
 
             <CustomButton 
                 text = "Already a member? Sign in here" 
                 onPress={onSignInPressed} 
-                type='TERTIARY'
-                fgColor={'white'}
+                type='TEXT'
+                color={'white'}
                 fontWeight={'bold'}
+                fontSize={16}
+                marginVertical={5}
             />  
             <View style={styles.space}/>
         </View>

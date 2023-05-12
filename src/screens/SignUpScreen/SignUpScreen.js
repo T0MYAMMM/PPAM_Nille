@@ -34,7 +34,7 @@ const SignUpScreen = ({navigation}) => {
             navigation.navigate('ConfirmEmail');
         } catch (error) {
           alert(error.message);
-        }
+        }m
     };
 
     const isValidEmail = (email) => {
@@ -81,9 +81,8 @@ const SignUpScreen = ({navigation}) => {
     };
 
     return (
-        <ScrollView showsVerticalScrollIndicator={true}>
-            <View style={styles.root}>
-                <View style={styles.space}/>
+        <View style={styles.root}>
+            <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.scrollViewContent}>
                 
                 <Text style = {styles.title}>Create an account</Text>
 
@@ -111,9 +110,18 @@ const SignUpScreen = ({navigation}) => {
                     value = {passwordRepeat}
                     setValue = {setPasswordRepeat}
                     secureTextEntry
+                    width={'80%'}
                 />  
 
-                <CustomButton text = 'Register' onPress={onRegisterPressed} />
+                <CustomButton 
+                    text = 'Register' 
+                    onPress={onRegisterPressed} 
+                    type='LIGHT'    
+                    width={'80%'}
+                    height={50}
+                    padding={12}
+                    marginVertical={12}
+                />
 
                 <Text style = {styles.text}>
                     By registering, you confirm that you accept our{' '}
@@ -126,35 +134,40 @@ const SignUpScreen = ({navigation}) => {
                 <CustomButton 
                     text = "Have an account? Sign In" 
                     onPress={onHaveAccountPressed} 
-                    type='TERTIARY'
+                    type='TEXT'
+                    fontSize={16}
                 />  
 
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     );
  };
 
 const styles = StyleSheet.create({
     root: {
-        alignItems: 'center',
-        padding: 20,
+        flex:1,
         backgroundColor:'#051630',
     },
+    scrollViewContent: {
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
     text : {
+        textAlign: 'center',
         color: 'white',
         marginVertical: 10,
+        marginHorizontal: 50,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
-        margin: 10,
+        margin: 20,
     },
     link: {
         color: '#FDB075',
-    },
-    space: {
-        height: 50,
     },
 });
 

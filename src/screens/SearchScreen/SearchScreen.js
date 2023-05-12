@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import fishData from '../../../fish_data.js';
+import { db } from '../../../firebaseConfig.js';
+import { ref, onValue} from 'firebase/database';
+import CustomButton from '../../components/CustomButton/CustomButton.js';
+
 
 const SearchScreen = () => {
+    const [allData, setAllData] = useState([]);
+    const [todoData, setTodoData] = useState([]);
     const [query, setQuery] = useState('');
-    const [searchResult, setSearchResult] = useState([]);
-    
+
+    useEffect(() => {
+      const startCountRef = ref(db, 'fish_data/');
+      onValue(startCountRef, (snapshot) => {
+        const data = snapshot.val();
+
+        const newPosts = Object.keys(data).map((key) => {
+          const { id, name, location, imageURL } = data[key];
+          return { id, name, location, imageURL };
+        });
+        setAllData(newPosts);
+        setTodoData(newPosts);
+      });
+    }, [])
+
     const onSearchPressed = () => {
-      const filteredResult = fishData.filter((item) =>
+      const filteredResult = allData.filter((item) =>
         item.name.toLowerCase().includes(query.toLowerCase())
       );
-      setSearchResult(filteredResult);
+      setTodoData(filteredResult);
     };
 
     const renderSearchResult = ({ item }) => {
-      const images = item.image;
+      //const images = item.image;
       return (
         <TouchableOpacity style={styles.card}>
           <Image
             style={styles.cardImage}
-            source={images}
+            source={{uri: item.imageURL}}
             resizeMode="contain"
           />
           <View style={styles.cardContent}>
@@ -35,7 +53,7 @@ const SearchScreen = () => {
     };
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container}>  
         <View style={styles.searchBar}>
           <Ionicons name="ios-search" size={24} color="gray" />
           <TextInput
@@ -47,21 +65,28 @@ const SearchScreen = () => {
             returnKeyType="search" // Mengubah text pada tombol "Return" menjadi "Search"
           />
         </View>
-        <TouchableOpacity style={styles.searchButton} onPress={onSearchPressed}>
-          <Text style={styles.searchButtonText}>Search</Text>
-        </TouchableOpacity>
-        {searchResult.length > 0 ? (
+        <CustomButton  
+          onPress={onSearchPressed}
+          text='Search'
+          type='LIGHT'
+          width='90%'
+          height={50}
+          padding={12}
+          marginVertical={15}
+          
+        />
+        {todoData.length > 0 ? (
           <FlatList
-            data={searchResult}
+            data={todoData}
             renderItem={renderSearchResult}
             keyExtractor={(item) => item.id.toString()}
             style={styles.resultContainer}
-            extraData={searchResult}
+            extraData={todoData}
             virtualizedList={true} // Menambahkan properti virtualizedList
           />
         ) : (
           <View style={{padding:10}}>
-            <Text style={{color: 'white', fontWeight:'bold', fontSize:24}}>No results found.</Text>
+            <Text style={{color: 'white', fontWeight:'bold', fontSize:16}}>No results found.</Text> 
           </View>
         )}
       </View>
@@ -79,24 +104,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 16,
-
-    backgroundColor: 'white',
-    borderColor: '#6EA9B1',
-    borderWidth: 1,
     borderRadius: 75,
-    paddingHorizontal: 10,
-    marginVertical: 10,
-    
-
-    width: "90%",
+    padding: 8,
+    width: '90%',
     height: 50,
     shadowColor: '#000',
     shadowOffset: {
-        width: 0,
-        height: 3,
+      width: 0,
+      height: 3,
     },
     shadowOpacity: 0.25,
     shadowRadius: 100,
@@ -109,41 +124,18 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
   },
-  searchButton: {
-    backgroundColor: '#007aff',
-    padding: 12,
-    borderRadius: 75,
-    alignItems: 'center',
-
-    width: "90%",
-    height: 50,
-    shadowColor: '#000',
-    shadowOffset: {
-        width: 0,
-        height: 3,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 100,
-    elevation: 5,
-  },
-  searchButtonText: {
-    fontSize: 18,
-    color: 'white',
-    fontWeight: 'bold',
-  },
   resultContainer: {
-    marginTop: 16,
-    borderRadius:15,
-    width:"90%",
+    flex: 1,
+    width:"100%",
     contentContainerStyle:{alignItems:'center'}
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 20,
     padding: 8,
-    marginBottom: 8,
+    marginBottom: 15,
     width:"100%",
   },
   cardImage: {
