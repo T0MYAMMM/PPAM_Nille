@@ -2,23 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { db } from '../../../firebaseConfig.js';
-import { ref, onValue} from 'firebase/database';
+import { onValue, ref } from 'firebase/database';
 import CustomButton from '../../components/CustomButton/CustomButton.js';
 
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
     const [allData, setAllData] = useState([]);
     const [todoData, setTodoData] = useState([]);
     const [query, setQuery] = useState('');
 
     useEffect(() => {
-      const startCountRef = ref(db, 'fish_data/');
+      const startCountRef = ref(db, 'ornamental_fish_data/');
       onValue(startCountRef, (snapshot) => {
         const data = snapshot.val();
-
         const newPosts = Object.keys(data).map((key) => {
-          const { id, name, location, imageURL } = data[key];
-          return { id, name, location, imageURL };
+          const { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber } = data[key];
+          return { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber };
         });
         setAllData(newPosts);
         setTodoData(newPosts);
@@ -27,7 +26,7 @@ const SearchScreen = () => {
 
     const onSearchPressed = () => {
       const filteredResult = allData.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
+        item.nama_populer.toLowerCase().includes(query.toLowerCase())
       );
       setTodoData(filteredResult);
     };
@@ -35,17 +34,21 @@ const SearchScreen = () => {
     const renderSearchResult = ({ item }) => {
       //const images = item.image;
       return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => {
+            navigation.navigate('DetailFishScreen', { fishId: item.id_spesies })
+          }}
+        >
+          
           <Image
             style={styles.cardImage}
-            source={{uri: item.imageURL}}
+            source={require('../../../assets/images/arwana.jpg')}
             resizeMode="contain"
           />
           <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{item.name}</Text>
+            <Text style={styles.cardTitle}>{item.nama_populer}</Text>
             <View style={styles.cardDetails}>
-              <Ionicons name="ios-pin" size={16} color="#8E8E93" />
-              <Text style={styles.cardDetailsText}>{item.location}</Text>
+              <Text style={styles.cardDetailsText}>{item.asal}</Text>
+              <Text style={styles.cardDetailsText}>{item.ukuran_maksimum}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -73,13 +76,12 @@ const SearchScreen = () => {
           height={50}
           padding={12}
           marginVertical={15}
-          
         />
         {todoData.length > 0 ? (
           <FlatList
             data={todoData}
             renderItem={renderSearchResult}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.id_spesies}
             style={styles.resultContainer}
             extraData={todoData}
             virtualizedList={true} // Menambahkan properti virtualizedList
@@ -134,18 +136,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingVertical:1,
     marginBottom: 15,
     width:"100%",
   },
   cardImage: {
     width: '40%',
     height: 100,
-    resizeMode: 'contain',
-    marginRight: 8,
+    resizeMode: 'contain', 
   },
   cardTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 2,
     marginTop:15,
@@ -158,8 +160,8 @@ const styles = StyleSheet.create({
     borderRadius:15,
   },
   cardDetails: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   cardDetailsText: {
     fontSize: 16,
