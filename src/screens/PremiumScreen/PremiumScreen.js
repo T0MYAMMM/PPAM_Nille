@@ -32,7 +32,8 @@ const PremiumScreen = () => {
   });
 
   const onUploadImagePressed = () => {
-    navigation.navigate('UploadImageScreen');
+    navigation.navigate('UploadImageScreen', {
+      handleImageUpload });
   };
 
   return (

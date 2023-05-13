@@ -73,9 +73,9 @@ const BottomTabNavigator = () => {
 };
 
 const AppNavigator = () => {
-  const [handleImageUpload, setHandleImageUpload] = useState(null);
-  const updateHandleImageUpload = (imageUrl) => {
-    setHandleImageUpload(imageUrl);
+  const handleImageUpload = (url) => {
+    console.log('URL Gambar:', url);
+    // Lakukan tindakan atau logika yang sesuai dengan URL gambar di sini
   };
   return (
       <ImageUploadContext.Provider value={handleImageUpload}>
@@ -87,7 +87,7 @@ const AppNavigator = () => {
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>
           <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
           <Stack.Screen name="Main" component={BottomTabNavigator}></Stack.Screen>
-          <Stack.Screen name="UploadImageScreen" component={UploadImageScreen} initialParams={{ handleImageUpload: updateHandleImageUpload }} ></Stack.Screen>
+          <Stack.Screen name="UploadImageScreen" component={UploadImageScreen} initialParams={{ handleImageUpload: handleImageUpload }} ></Stack.Screen>
         </Stack.Navigator>
       </ImageUploadContext.Provider>
   );

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { storage } from '../../../firebaseConfig';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -11,6 +11,13 @@ const UploadImageScreen = ({ navigation, route }) => {
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const handleImageUpload = route.params.handleImageUpload;
+
+  useEffect(() => {
+    navigation.setOptions({
+      handleImageUpload: handleImageUpload,
+    });
+  }, []);
 
   const pickImage = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -52,11 +59,9 @@ const UploadImageScreen = ({ navigation, route }) => {
       //await uploadBytes(ref, blob);
       //console.log('berhasil')
   
-      const url = await getDownloadURL(storageRef).then((url) => {
-        return url;
-      })
-
-      route.params.handleImageUpload(url);
+      const url = await getDownloadURL(storageRef);
+      console.log(url)
+      handleImageUpload(url);
   
       setUploading(false);
       Alert.alert('Photo uploaded successfully!');
@@ -80,7 +85,11 @@ const UploadImageScreen = ({ navigation, route }) => {
                 <Image source={{ uri: image }} style={styles.image} />
             </View>
         )}
-        <CustomButton text="Upload Image" onPress={uploadImage} />
+        <CustomButton 
+          text="Upload Image" 
+          onPress={uploadImage} 
+          handleImageUpload={route.params.handleImageUpload}
+        />
     </ScrollView>
   );
 };

@@ -48,6 +48,8 @@ const SignInScreen = ({navigation}) => {
                 throw new Error('Username or password doesn\'t match');
             } else if (error.code === 'auth/too-many-requests') {
                 throw new Error('Access has been temporarily disabled. Please reset your password to restore access, or try again later.');
+            } if (error.code === 'auth/invalid-email') {
+                throw new Error('Invalid email');
             } else {
                 //console.error(errorMessage);
                 throw error;
