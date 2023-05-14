@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { get, ref, onValue } from 'firebase/database';
 import { db } from '../../../firebaseConfig';
@@ -7,6 +7,7 @@ import { db } from '../../../firebaseConfig';
 const DetailFishScreen = ({ navigation, route }) => {
     const { fishId } = route.params;
     const [fishData, setFishData] = useState(null);
+    const scrollA = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         const fishRef = ref(db, 'ornamental_fish_data/');
@@ -17,7 +18,7 @@ const DetailFishScreen = ({ navigation, route }) => {
             setFishData(fish);
           }
         });
-      }, []);
+    }, []);
 
     const goBack = () => {
         navigation.goBack();
@@ -26,9 +27,9 @@ const DetailFishScreen = ({ navigation, route }) => {
     const scrollToSection = (ref) => {
         if (ref && ref.current) {
             ref.current.measureLayout(
-                ScrollView.getScrollView().getInnerViewNode(),
+                ref.current.getInnerViewNode(),
                 (x, y) => {
-                  ref.current.scrollTo({ y, animated: true });
+                    ref.current.scrollTo({ y: y, animated: true });
                 }
             );
         }
@@ -40,216 +41,287 @@ const DetailFishScreen = ({ navigation, route }) => {
     const articlesRef = useRef(null);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            {fishData ? (
-                <View style={styles.content}>
-                    <TouchableOpacity style={styles.backButton} onPress={goBack}>
-                        <Ionicons name="arrow-back" size={24} color="white" />
-                    </TouchableOpacity>
-
-                    <View style={styles.header}>
-                            <Image 
-                                style={styles.image} 
-                                source={require('../../../assets/images/arwana.jpg')} 
-                                resizeMode="contain" 
+        <View style={styles.root}>
+            <Animated.ScrollView
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollA } } }],
+                    { useNativeDriver: true },
+                )}
+                scrollEventThrottle={16}
+            >
+                {fishData ? (
+                    <View style={styles.content1}>
+                        <View style={styles.bannerContainer}>
+                            <Animated.Image
+                                style={styles.image(scrollA)}
+                                source={require('../../../assets/images/arwana.jpg')}
+                                resizeMode="contain"
                             />
-                            <Text style={styles.title}>{fishData.nama_populer}</Text>
-                            <Text style={styles.subtitle}>{fishData.nama_lokal}</Text>
-                            <Text style={styles.subtitle}>{fishData.nama_ilmiah}</Text>
-                    </View>
 
-                    <View style={styles.cardContainer}>
-                        <View style={styles.card}>
-                            <Ionicons name="construct-outline" size={32} color="#FFC107" />
-                            <Text style={styles.cardText}>Temperature: {fishData.temperature}</Text>
-                        </View>
-                        
-                        <View style={styles.card}>
-                            <Ionicons name="water-outline" size={32} color="#03A9F4" />
-                            <Text style={styles.cardText}>pH Level: {fishData.pHLevel}</Text>
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.title}>{fishData.nama_populer}</Text>
+                                <View style={styles.subtitleContainer}>
+                                    <Text style={styles.subtitle_ilmiahname}>{fishData.nama_ilmiah}</Text>
+                                    {fishData.nama_lokal !== "-" && (
+                                        <Text style={styles.subtitle_lokalname}>Ikan {fishData.nama_lokal}</Text>
+                                    )}
+                                </View>
+
+                            </View>
                         </View>
 
-                        <View style={styles.card}>
-                            <Ionicons name="timer-outline" size={32} color="#9C27B0" />
-                            <Text style={styles.cardText}>Feeding Schedule: {fishData.feedingSchedule}</Text>
+                        <View style={styles.content2}>
+                            <View style={styles.cardContainer}>
+                                <View style={styles.card}>
+                                    <Ionicons name="thermometer-outline" size={32} color="#051630" />
+                                    <Text style={styles.cardText}>Temperature: {fishData.temperature}</Text>
+                                    <Text style={styles.cardText}>20°C</Text>
+                                </View>
+
+                                <View style={styles.card}>
+                                    <Ionicons name="water-outline" size={32} color="#051630" />
+                                    <Text style={styles.cardText}>pH Level: {fishData.pHLevel}</Text>
+                                    <Text style={styles.cardText}>7.8</Text>
+                                </View>
+
+                                <View style={styles.card}>
+                                    <Ionicons name="alarm-outline" size={32} color="#051630" />
+                                    <Text style={styles.cardText}>Schedule: {fishData.feedingSchedule}</Text>
+                                    <Text style={styles.cardText}>08.00 | 20.00</Text>
+                                    </View>
+                            </View>
+
+                            <View style={styles.separator} />
+
+                            <View style={styles.shortcutContainer}>
+                                <TouchableOpacity
+                                    style={styles.shortcutButton}
+                                    onPress={() => scrollToSection(descriptionRef)}
+                                >
+                                    <Text style={styles.shortcutText}>Description</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.shortcutButton}
+                                    onPress={() => scrollToSection(careRef)}
+                                >
+                                    <Text style={styles.shortcutText}>Care</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.shortcutButton}
+                                    onPress={() => scrollToSection(characteristicsRef)}
+                                >
+                                    <Text style={styles.shortcutText}>Characteristics</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.shortcutButton}
+                                    onPress={() => scrollToSection(articlesRef)}
+                                >
+                                    <Text style={styles.shortcutText}>Articles</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.separator} />
+
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>Description</Text>
+
+                                <ScrollView style={styles.subSection} ref={descriptionRef}>
+                                    <Text style={styles.sectionText}>{fishData.ciri_umum}</Text>
+                                    <Text style={styles.sectionText}>{fishData.distribusi_habitat}</Text>
+                                </ScrollView>
+                            </View>
+
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>Care</Text>
+
+                                <ScrollView style={styles.subSection} ref={careRef}>
+                                    <Text style={styles.sectionText}>{fishData.pemeliharaan}</Text>
+                                    <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
+                                    <Text style={styles.sectionText}>{fishData.pakan_larva}</Text>
+                                </ScrollView>
+                            </View>
+
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>Additional Information</Text>
+
+                                <ScrollView style={styles.subSection} ref={characteristicsRef}>
+                                    <Text style={styles.sectionText}>{fishData.keterangan}</Text>
+                                    <Text style={styles.sectionText}>{fishData.status}</Text>
+                                    <Text style={styles.sectionText}>{fishData.sumber}</Text>
+                                </ScrollView>
+                            </View>
+
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>Articles</Text>
+
+                                <ScrollView style={styles.subSection} ref={articlesRef}>
+                                    <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
+                                </ScrollView>
+                            </View>
                         </View>
                     </View>
-
-                    <Text style={styles.pembatas}> Ini adalah pembatas antara card dan section</Text>
-
-                    <View style={styles.shortcutContainer}>
-                    <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            <TouchableOpacity
-                            style={styles.shortcut}
-                            onPress={() => scrollToSection(descriptionRef)}
-                            >
-                            <Text style={styles.shortcutText}>Description</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                            style={styles.shortcut}
-                            onPress={() => scrollToSection(careRef)}
-                            >
-                            <Text style={styles.shortcutText}>Care</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                            style={styles.shortcut}
-                            onPress={() => scrollToSection(characteristicsRef)}
-                            >
-                            <Text style={styles.shortcutText}>Characteristics</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                            style={styles.shortcut}
-                            onPress={() => scrollToSection(articlesRef)}
-                            >
-                            <Text style={styles.shortcutText}>Articles</Text>
-                            </TouchableOpacity>
-                        </ScrollView>
-                    </View>
-
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Description</Text>
-                        
-                        <ScrollView style={styles.subSection} ref={descriptionRef}>
-                            <Text style={styles.sectionText}>{fishData.ciri_umum}</Text>
-                            <Text style={styles.sectionText}>{fishData.distribusi_habitat}</Text>
-                            <Text style={styles.sectionText}>{fishData.keterangan}</Text>
-                        </ScrollView>
-                    </View>
-
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Care</Text>
-
-                        <ScrollView style={styles.subSection} ref={careRef}>
-                            <Text style={styles.sectionText}>{fishData.pemeliharaan}</Text>
-                            <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
-                            <Text style={styles.sectionText}>{fishData.pakan_larva}</Text>
-                        </ScrollView>
-                    </View>
-
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Characteristics</Text>
-                        
-                        <ScrollView style={styles.subSection} ref={characteristicsRef}>
-                            <Text style={styles.sectionText}>{fishData.pakan_larva}</Text>
-                            <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
-                        </ScrollView>
-                    </View>
-
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Articles</Text>   
-                        
-                        <ScrollView style={styles.subSection} ref={articlesRef}>
-                            <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
-                        </ScrollView>
-                    </View>
-                </View>
-            ) : null}
-        </ScrollView>
+                ) : null}
+            </Animated.ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    root: {
         flexGrow: 1,
-        backgroundColor: '#051630',
-        padding: 16,
     },
-    content: {
+    content1: {
         flex: 1,
         alignItems: 'center',
+    },
+    content2: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#051630',
+        width: '100%',
+        padding: 20,
     },
     backButton: {
         position: 'absolute',
         top: 16,
-        left: 16,
+        left: 5,
         padding: 8,
     },
-    header: {
+    bannerContainer: {
         alignItems: 'center',
-        marginBottom: 16,
+        marginTop: -1000,
+        paddingTop: 1000,
+        overflow: 'hidden',
+        width: '100%',
+        backgroundColor: 'black',
     },
-    image: {
-        width: 200,
-        height: 200,
-        borderRadius: 100,
-        marginBottom: 16,
-    },
-    pembatas: {
-        fontSize: 16,
-        textAlign: 'center',
-        color: 'white',
-        marginVertical: 20,
-    },
-    shortcutContainer: {
-        flexDirection:'row',
-    },
-    shortcutText: {
-        fontSize: 16,
-        color: 'white',
-    },
-    shortcut: {
-        alignSelf: 'stretch',
+    image: scrollA =>  ({
+        height: 344,
+        transform: [
+            {
+                translateY: scrollA.interpolate({
+                    inputRange: [-344, 0, 344, 344+1],
+                    outputRange: [-344/2, 0, 344*0.5,344*0.5],
+                }),
+            },
+            {
+                scale: scrollA.interpolate({
+                    inputRange: [-344, 0, 344, 344+1],
+                    outputRange: [2,1, 0.75, 0.75],
+                }),
+            },
+        ],
+    }),
+    titleContainer: {
+        width: '100%',
         alignItems: 'center',
-        padding: 5,
-        backgroundColor: '#0F344C',
-        marginHorizontal:5,
-        marginBottom: 8,
+        backgroundColor: 'rgba(225, 0, 0, 0.0)',
     },
     title: {
-        fontSize: 24,
+        fontSize: 36,
         fontWeight: 'bold',
         color: 'white',
+    },
+    subtitleContainer: {
+        alignItems: 'center',
+        flexDirection: 'column',
         marginBottom: 8,
     },
-    subtitle: {
+    subtitle_lokalname: {
+        fontSize: 16,
+        fontStyle: 'normal',
+        color: 'white',
+        marginVertical: 10,
+    },
+    subtitle_ilmiahname: {
         fontSize: 16,
         fontStyle: 'italic',
         color: 'white',
-        marginBottom: 8,
     },
     cardContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 16,
     },
     card: {
         alignItems: 'center',
-        padding: 5,
-        width: '33%'
+        padding: 10,
+        width: '30%',
+        borderRadius: 10,
+        backgroundColor: 'white',
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        marginHorizontal: 8,
     },
     cardText: {
-        fontSize: 12,
-        color: 'white',
-        marginTop: 8,
-        padding: 5
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#051630',
+    },
+    shortcutContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    shortcutButton: {
+        alignSelf: 'stretch',
+        alignItems: 'center',
+        padding: 10,
+        backgroundColor: 'white',
+        marginHorizontal: 5,
+        borderRadius: 10,
+        shadowColor: 'white',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    shortcutText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#051630',
+    },
+    separator: {
+        alignSelf: 'stretch',
+        borderBottomWidth: 5,
+        borderRadius: 5,
+        borderBottomColor: 'white',
+        marginVertical: 10,
     },
     section: {
-        flex:1,
-        marginBottom: 24,
-        width:'100%',
+        flex: 1,
+        width: '100%',
     },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
-        marginBottom: 8,
+        marginBottom: 10,
+        marginLeft: 10,
     },
     subSection: {
-        backgroundColor: '#0F344C',
+        backgroundColor: 'white',
         borderRadius: 8,
         padding: 16,
+        marginBottom: 10,
     },
     sectionText: {
         fontSize: 16,
-        color: 'white',
-        marginBottom: 8,
-      },
-  });
-    
+        color: '#051630',
+        padding: 5,
+        textAlign: 'justify',
+    },
+});
+
 export default DetailFishScreen;

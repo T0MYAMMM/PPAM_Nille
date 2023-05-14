@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { get, ref } from 'firebase/database';
 import { db } from '../../firebaseConfig'; 
@@ -19,13 +20,38 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import GetStartedScreen from '../screens/GetStartedScreen/GetStartedScreen';
 import UploadImageScreen from '../screens/UploadImageScreen/UploadImageScreen';
 import DetailFishScreen from '../screens/DetailFishScreen';
+//import DrawerScreen from '../screens/DrawerScreen/DrawerScreen';
 
 import ImageUploadContext from '../screens/ImageUploadContext';
+import ScreenHeader from '../components/ScreenHeader/ScreenHeader';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+//const Drawer = createDrawerNavigator();
 
 const BottomTabNavigator = () => {
+  const CustomHeader = ({ title, headerBg, iconColor, titleColor }) => {
+    const navigation = useNavigation();
+  
+    return (
+      <ScreenHeader
+        title={title}
+        headerBg={headerBg}
+        iconColor={iconColor}
+        titleAlign='center'
+        menu
+        right='more-vertical'
+        rightFunction={() => console.log('right')}
+        optionalIcon='bell'
+        optionalFunc={() => console.log('optional')}
+        optionalbadge={5}
+        navigation={navigation}
+        titleColor={titleColor}
+      />
+    );
+  };
+
   return (
     <Tab.Navigator
         initialRouteName="Home"
@@ -59,21 +85,48 @@ const BottomTabNavigator = () => {
             tabStyle: { paddingBottom: 0, paddingTop: 0},
             tabBarIconStyle: { marginVertical: 0 },
             tabBarLabelStyle: { marginBottom: 10 },
-            headerShown: true,
-            headerTitleAlign: 'left',
-            headerTitleStyle: { fontFamily: 'sans-serif', fontWeight:'bold', fontSize: 20, color: 'white' },
-            headerStyle: { backgroundColor: '#007aff' },
             tabBarPressColor: 'rgba(5, 22, 48, 0.2)', // menambahkan efek klik
         })}
     >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="MyAquarium" component={MyAquariumScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Nille" component={ChatBotScreen} />
-        <Tab.Screen name="Premium" component={PremiumScreen} />
+        <Tab.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{
+            header: () => <CustomHeader title="Home" headerBg="white" iconColor="#051630" titleColor='#051630'/>,
+          }}
+        />
+        <Tab.Screen 
+          name="MyAquarium" 
+          component={MyAquariumScreen} 
+          options={{
+            header: () => <CustomHeader title="My Aquarium" headerBg="white" iconColor="#051630" titleColor='#051630'/>,
+          }}
+        />
+        <Tab.Screen 
+          name="Search" 
+          component={SearchScreen} 
+          options={{
+            header: () => <CustomHeader title="Search" headerBg="white" iconColor="#051630" titleColor='#051630'/>,
+          }}
+        />
+        <Tab.Screen 
+          name="Nille" 
+          component={ChatBotScreen} 
+          options={{
+            header: () => <CustomHeader  title="Nille" headerBg="white" iconColor="#051630" titleColor='#051630'/>,
+          }}
+        />
+        <Tab.Screen 
+          name="Premium" 
+          component={PremiumScreen} 
+          options={{
+            header: () => <CustomHeader title="Premium" headerBg="white" iconColor="#051630"/>,
+          }}
+        />
     </Tab.Navigator>
   );
 };
+
 
 const AppNavigator = () => {
   const [fishData, setFishData] = useState([]);
@@ -98,21 +151,23 @@ const AppNavigator = () => {
 
     getFishData();
   }, []);
-  
+
   const handleImageUpload = (url) => {
     console.log('URL Gambar:', url);
     // Lakukan tindakan atau logika yang sesuai dengan URL gambar di sini
   };
+
   return (
     <ImageUploadContext.Provider value={handleImageUpload}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
-        <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
-        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
-        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
-        <Stack.Screen name="Main" component={BottomTabNavigator} />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen 
+          name="Main" 
+          component={BottomTabNavigator} 
+        />
 
         <Stack.Screen
           name="DetailFishScreen"

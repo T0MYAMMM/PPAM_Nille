@@ -5,6 +5,7 @@ import CustomButton from '../../components/CustomButton/CustomButton';
 import { getAuth, signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const HomeScreen = () => {
     const navigation = useNavigation();
     const {height} = useWindowDimensions();
