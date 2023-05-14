@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { get, ref } from 'firebase/database';
 import { db } from '../../firebaseConfig'; 
 
@@ -22,7 +23,7 @@ const StackNavigator = () => {
     // Mengambil data ikan dari Firebase dan menyimpannya dalam state
     const getFishData = async () => {
       try {
-        const snapshot = await get(ref(db, 'ornamental_fish_data/'));
+        const snapshot = await get(ref(db, 'ornamental_data_fish/'));
         const data = snapshot.val();
 
         if (data) {
@@ -48,12 +49,13 @@ const StackNavigator = () => {
   return (
     <ImageUploadContext.Provider value={handleImageUpload}>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
+      <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
         <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
         <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
         <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
+        
         <Stack.Screen name="Main" component={BottomTabNavigator} />
 
         <Stack.Screen

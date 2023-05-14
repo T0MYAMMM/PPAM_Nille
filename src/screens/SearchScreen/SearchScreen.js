@@ -12,12 +12,12 @@ const SearchScreen = ({ navigation }) => {
     const [query, setQuery] = useState('');
 
     useEffect(() => {
-      const startCountRef = ref(db, 'ornamental_fish_data/');
+      const startCountRef = ref(db, 'ornamental_data_fish/');
       onValue(startCountRef, (snapshot) => {
         const data = snapshot.val();
         const newPosts = Object.keys(data).map((key) => {
-          const { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber } = data[key];
-          return { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber };
+          const { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber, imageUrl } = data[key];
+          return { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber, imageUrl };
         });
         setAllData(newPosts);
         setTodoData(newPosts);
@@ -41,7 +41,7 @@ const SearchScreen = ({ navigation }) => {
           
           <Image
             style={styles.cardImage}
-            source={require('../../../assets/images/arwana.jpg')}
+            source={{uri: item.imageUrl}}
             resizeMode="contain"
           />
           <View style={styles.cardContent}>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems:'center',
     backgroundColor:'#051630',
+    paddingBottom: 0,
   },
   searchBar: {
     flexDirection: 'row',

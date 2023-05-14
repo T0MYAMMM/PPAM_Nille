@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Animated, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { get, ref, onValue } from 'firebase/database';
 import { db } from '../../../firebaseConfig';
+
+const { width: screenWidth } = Dimensions.get('window');
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const imageHeight = windowHeight * 0.57; 
 
 const DetailFishScreen = ({ navigation, route }) => {
     const { fishId } = route.params;
@@ -10,7 +15,7 @@ const DetailFishScreen = ({ navigation, route }) => {
     const scrollA = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        const fishRef = ref(db, 'ornamental_fish_data/');
+        const fishRef = ref(db, 'ornamental_data_fish/');
         onValue(fishRef, (snapshot) => {
           const data = snapshot.val();
           if (data) {
@@ -53,8 +58,8 @@ const DetailFishScreen = ({ navigation, route }) => {
                     <View style={styles.content1}>
                         <View style={styles.bannerContainer}>
                             <Animated.Image
-                                style={styles.image(scrollA)}
-                                source={require('../../../assets/images/arwana.jpg')}
+                                style={styles.image(scrollA, fishData.imageUrl)}
+                                source={{uri: fishData.imageUrl}}
                                 resizeMode="contain"
                             />
 
@@ -161,6 +166,12 @@ const DetailFishScreen = ({ navigation, route }) => {
                                     <Text style={styles.sectionText}>{fishData.reproduksi}</Text>
                                 </ScrollView>
                             </View>
+
+                            <Animated.Image
+                                style={styles.imageBiasa}
+                                source={{uri: fishData.imageUrl}}
+                                resizeMode="contain"
+                            />
                         </View>
                     </View>
                 ) : null}
@@ -192,33 +203,41 @@ const styles = StyleSheet.create({
     },
     bannerContainer: {
         alignItems: 'center',
-        marginTop: -1000,
-        paddingTop: 1000,
+        marginTop: -imageHeight,
+        paddingTop: imageHeight,
         overflow: 'hidden',
         width: '100%',
         backgroundColor: 'black',
     },
-    image: scrollA =>  ({
-        height: 344,
+    image: (scrollA, imageUrl) => ({
+        height: imageHeight,
+        width: '140%',
         transform: [
             {
                 translateY: scrollA.interpolate({
-                    inputRange: [-344, 0, 344, 344+1],
-                    outputRange: [-344/2, 0, 344*0.5,344*0.5],
+                    inputRange: [-imageHeight, 0, imageHeight, imageHeight+1],
+                    outputRange: [-imageHeight/2, 0, imageHeight*0.5,imageHeight*0.5],
+                    extrapolate: 'clamp',
                 }),
             },
             {
                 scale: scrollA.interpolate({
-                    inputRange: [-344, 0, 344, 344+1],
-                    outputRange: [2,1, 0.75, 0.75],
+                    inputRange: [-imageHeight, 0, imageHeight, imageHeight+1],
+                    outputRange: [2,1, 1.5, 1.5],
+                    extrapolate: 'clamp',
                 }),
             },
         ],
     }),
+    imageBiasa: {
+        width:'100%',
+        height:300,
+    },
     titleContainer: {
         width: '100%',
         alignItems: 'center',
         backgroundColor: 'rgba(225, 0, 0, 0.0)',
+        marginBottom:20,
     },
     title: {
         fontSize: 36,
@@ -294,7 +313,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         alignSelf: 'stretch',
-        borderBottomWidth: 5,
+
         borderRadius: 5,
         borderBottomColor: 'white',
         marginVertical: 10,

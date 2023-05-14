@@ -6,11 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const IconSize = 24;
 
-const ScreenHeader = ({ menu, back, title, right, rightFunction, optionalIcon, optionalFunc, navigation, headerBg, iconColor, titleAlign, optionalbadge, titleColor }) => {
+const ScreenHeader = ({ menu, onMenuPress, back, title, right, rightFunction, optionalIcon, optionalFunc, navigation, headerBg, iconColor, titleAlign, optionalbadge, titleColor }) => {
   return (
     <Surface style={[styles.header, {backgroundColor:  headerBg}]}>
       <View style={styles.view}>
-        {menu && <TouchableOpacity onPress={() => navigation.optionDrawer()}>
+        {menu && <TouchableOpacity onPress={onMenuPress}>
             <Feather name="menu" size={IconSize} color={iconColor}/>
         </TouchableOpacity>}
 

@@ -1,24 +1,42 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Feather } from '@expo/vector-icons';
 
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingScreen from '../screens/SettingScreen';
 
-const Drawer = createDrawerNavigator({
-    ProfileScreen,
-    SettingScreen
-})
+const Drawer = createDrawerNavigator();
+
+const ToProfileScreen = ({ navigation }) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        onPress={() => navigation.navigate('ProfileScreen')}
+        title="Go to profile"
+      />
+    </View>
+  );
+};
+
+const ToSettingScreen = ({ navigation }) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        onPress={() => navigation.navigate('SettingScreen')}
+        title="Go to settings"
+      />
+    </View>
+  );
+};
 
 const DrawerNavigator = () => {
-    return(
-        <Drawer.Navigator>
-            <Drawer.Screen name='Profile' component={ProfileScreen}/>
-            <Drawer.Screen name='Setting' component={SettingScreen}/>
-        </Drawer.Navigator>
-    );
+  return (
+      <Drawer.Navigator>
+        <Drawer.Screen name="Profile" component={ToProfileScreen} />
+        <Drawer.Screen name="Setting" component={ToSettingScreen} />
+      </Drawer.Navigator>
+  );
 };
 
 const styles = StyleSheet.create({
