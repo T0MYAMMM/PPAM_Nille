@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet, Text,} from 'react-native';
-import { AppLoading } from 'expo';
-import AppNavigator from './src/navigation/AppNavigator';
-import { NavigationContainer } from '@react-navigation/native';
+import AppNavigation from './navigation/AppNavigation';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <SafeAreaView style={styles.root}>
-        <AppNavigator/>
-      </SafeAreaView>
-    </NavigationContainer>
+    <SafeAreaView style={styles.root}>
+      <AppNavigation/>
+    </SafeAreaView>
   );
 };
 
