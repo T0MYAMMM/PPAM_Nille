@@ -1,16 +1,16 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Surface, Title } from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { Bars3Icon as Bars3Solid, BellIcon as BellSolid } from 'react-native-heroicons/solid';
 
-const IconSize = 24;
+const IconSize = 30;
 
 const ScreenHeader = ({ menu, onMenuPress, back, title, right, rightFunction, optionalIcon, optionalFunc, navigation, headerBg, iconColor, titleAlign, optionalbadge, titleColor }) => {
   return (
     <Surface style={[styles.header, {backgroundColor:  headerBg}]}>
       <View style={styles.view}>
         {menu && <TouchableOpacity onPress={onMenuPress}>
-            <Feather name="menu" size={IconSize} color={iconColor}/>
+            <Bars3Solid name="menu" size={IconSize} color={iconColor}/>
         </TouchableOpacity>}
 
         {back && <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -24,7 +24,7 @@ const ScreenHeader = ({ menu, onMenuPress, back, title, right, rightFunction, op
 
       <View style={[styles.view, styles.rightView]}>
         {optionalFunc && <TouchableOpacity style={styles.rowView} onPress={optionalFunc}>
-            <Feather name={optionalIcon} size={IconSize} color={iconColor}/>
+            <BellSolid name={optionalIcon} size={IconSize} color={iconColor}/>
             <Badge style={{position:'absolute', top:-5, right:-10, }}>{optionalbadge}</Badge>
         </TouchableOpacity>}
 

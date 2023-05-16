@@ -1,5 +1,6 @@
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import React from 'react';
+import { themeColors } from '../theme';
 
 const CustomInput = ({ value, setValue, placeholder, secureTextEntry, width }) => {
   return (
@@ -17,14 +18,12 @@ const CustomInput = ({ value, setValue, placeholder, secureTextEntry, width }) =
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        borderColor: '#6EA9B1',
+        backgroundColor: themeColors.bgLight,
+        borderColor: themeColors.bgDark,
         borderWidth: 1,
         borderRadius: 75,
         paddingHorizontal: 10,
         marginVertical: 10,
-        
-
         width: '80%',
         height: 50,
         shadowColor: '#000',
@@ -35,7 +34,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 100,
         elevation: 5,
-      
     },
     input: {
       textAlignVertical: 'center',

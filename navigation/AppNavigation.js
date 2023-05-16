@@ -5,8 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
+import 'react-native-gesture-handler';
 
 //Newer Style
 import { themeColors } from '../theme';
@@ -84,16 +85,10 @@ const StackNavigator = () => {
       <Stack.Navigator 
         screenOptions={{
           headerShown: false,
-          contentStyle: {backgroundColor: '#051630'}}}
+          contentStyle: {backgroundColor: themeColors.bgDark}}}
       >
         
-        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
-        <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
-        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
-        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
-        <Stack.Screen name="Main" component={BottomTabNavigation} />
+        <Stack.Screen name="Main" component={DrawerNavigation} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}/>
 
         <Stack.Screen
           name="DetailFishScreen"
@@ -101,7 +96,11 @@ const StackNavigator = () => {
           options={({ route }) => {
             const { fishId } = route.params;
             const fish = fishData.find((item) => item.id_spesies === fishId);
-            return { fish };
+            return {
+              title: fish ? fish.name : "Detail", // Mengubah judul header
+              headerStyle: { backgroundColor: themeColors.bgLight }, // Mengubah background color header
+              headerTintColor: themeColors.bgDark, // Mengubah warna teks dan tombol kembali
+            };
           }}
         />
           
@@ -116,14 +115,13 @@ const StackNavigator = () => {
 };
 
 const BottomTabNavigation = () => {
-  const CustomHeader = ({ title, headerBg, iconColor, titleColor }) => {
+  const CustomHeader = ({ title }) => {
     const navigation = useNavigation();
-  
     return (
       <ScreenHeader
         title={title}
-        headerBg={headerBg}
-        iconColor={iconColor}
+        headerBg={themeColors.bgButton}
+        iconColor={themeColors.bgLight}
         titleAlign='center'
         menu
         onMenuPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
@@ -133,7 +131,7 @@ const BottomTabNavigation = () => {
         optionalFunc={() => console.log('optional')}
         optionalbadge={5}
         navigation={navigation}
-        titleColor={titleColor}
+        titleColor={themeColors.bgLight}
       />
     );
   };
@@ -150,19 +148,37 @@ const BottomTabNavigation = () => {
                 borderRadius: 50,
                 marginHorizontal: 20,
                 backgroundColor: themeColors.bgLight,
-      
               },
               tabBarItemStyle: {
                 marginTop: 5,
-                
               }
           })}
       >
-          <Tab.Screen name="home" component={HomeScreen} />
-          <Tab.Screen name="aquarium" component={MyAquariumScreen} />
-          <Tab.Screen name="search" component={SearchScreen} />
-          <Tab.Screen name="nille" component={ChatBotScreen} />
-          <Tab.Screen name="premium" component={PremiumScreen} />  
+          <Tab.Screen name="home" component={HomeScreen} options={({ navigation }) => ({
+              header: () => (
+                <CustomHeader title="Home" />
+              ),
+            })}/>
+          <Tab.Screen name="aquarium" component={MyAquariumScreen} options={({ navigation }) => ({
+              header: () => (
+                <CustomHeader title="MyAquarium"/>
+              ),
+            })}/>
+          <Tab.Screen name="search" component={SearchScreen} options={({ navigation }) => ({
+              header: () => (
+                <CustomHeader title="Search" />
+              ),
+            })}/>
+          <Tab.Screen name="nille" component={ChatBotScreen} options={({ navigation }) => ({
+              header: () => (
+                <CustomHeader title="Nille" />
+              ),
+            })}/>
+          <Tab.Screen name="premium" component={PremiumScreen} options={({ navigation }) => ({
+              header: () => (
+                <CustomHeader title="Premium"/>
+              ),
+            })}/>  
       </Tab.Navigator>
   );
 };
@@ -191,10 +207,33 @@ const menuIcons = (route, focused)=> {
   )
 }
 
+const DrawerNavigation = () => {
+  return(
+    <Drawer.Navigator 
+      screenOptions={{ 
+        headerShown: false, 
+        contentStyle: {backgroundColor: themeColors.bgDark},
+        drawerStyle: {backgroundColor: themeColors.bgDark},
+        drawerActiveTintColor: themeColors.lightCol,
+        drawerInactiveTintColor: themeColors.bgLight,
+      }}
+    >
+      <Drawer.Screen name="Home" component={BottomTabNavigation} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+      <Drawer.Screen name="Profile" component={ProfileScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+      <Drawer.Screen name="Setting" component={SettingScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+
+    </Drawer.Navigator>
+  );
+};
+
 const AppNavigation = () => {
   return (
     <NavigationContainer>
-      <StackNavigator/>
+      
+      
+        <StackNavigator/>
+
+
     </NavigationContainer>
   );
 };

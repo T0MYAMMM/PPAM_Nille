@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Animated, 
 import { Ionicons } from '@expo/vector-icons';
 import { get, ref, onValue } from 'firebase/database';
 import { db } from '../firebaseConfig';
+import { themeColors } from '../theme';
+
+import ScreenHeader from '../components/ScreenHeader';
 
 const { width: screenWidth } = Dimensions.get('window');
 const windowWidth = Dimensions.get('window').width;
@@ -47,6 +50,22 @@ const DetailFishScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.root}>
+            <ScreenHeader 
+                title={"Fish Information"}
+                headerBg={themeColors.bgDark}
+                iconColor={themeColors.bgLight}
+                titleAlign='center'
+                back
+                onMenuPress={() => navigation.goBack()}
+                right='more-vertical'
+                rightFunction={() => console.log('right')}
+                optionalIcon='bell'
+                optionalFunc={() => console.log('optional')}
+                optionalbadge={5}
+                navigation={navigation}
+                titleColor={themeColors.bgLight}
+            />
+
             <Animated.ScrollView
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollA } } }],
@@ -78,19 +97,19 @@ const DetailFishScreen = ({ navigation, route }) => {
                         <View style={styles.content2}>
                             <View style={styles.cardContainer}>
                                 <View style={styles.card}>
-                                    <Ionicons name="thermometer-outline" size={32} color="#051630" />
+                                    <Ionicons name="thermometer-outline" size={32} color={themeColors.bgDark} />
                                     <Text style={styles.cardText}>Temperature: {fishData.temperature}</Text>
                                     <Text style={styles.cardText}>20°C</Text>
                                 </View>
 
                                 <View style={styles.card}>
-                                    <Ionicons name="water-outline" size={32} color="#051630" />
+                                    <Ionicons name="water-outline" size={32} color={themeColors.bgDark} />
                                     <Text style={styles.cardText}>pH Level: {fishData.pHLevel}</Text>
                                     <Text style={styles.cardText}>7.8</Text>
                                 </View>
 
                                 <View style={styles.card}>
-                                    <Ionicons name="alarm-outline" size={32} color="#051630" />
+                                    <Ionicons name="alarm-outline" size={32} color={themeColors.bgDark} />
                                     <Text style={styles.cardText}>Schedule: {fishData.feedingSchedule}</Text>
                                     <Text style={styles.cardText}>08.00 | 20.00</Text>
                                     </View>
@@ -167,6 +186,8 @@ const DetailFishScreen = ({ navigation, route }) => {
                                 </ScrollView>
                             </View>
 
+                            <View style={styles.separator} />
+                                    
                             <Animated.Image
                                 style={styles.imageBiasa}
                                 source={{uri: fishData.imageUrl}}
@@ -191,27 +212,23 @@ const styles = StyleSheet.create({
     content2: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#051630',
+        backgroundColor: themeColors.bgDark,
         width: '100%',
-        padding: 20,
-    },
-    backButton: {
-        position: 'absolute',
-        top: 16,
-        left: 5,
-        padding: 8,
+        paddingHorizontal: 20,
+        marginTop:20,
     },
     bannerContainer: {
         alignItems: 'center',
-        marginTop: -imageHeight,
-        paddingTop: imageHeight,
+        marginTop: -imageHeight - 70,
+        paddingTop: imageHeight - 30,
         overflow: 'hidden',
         width: '100%',
-        backgroundColor: 'black',
+        backgroundColor: themeColors.bgDark,
     },
     image: (scrollA, imageUrl) => ({
         height: imageHeight,
         width: '140%',
+        backgroundColor:themeColors.bgDark,
         transform: [
             {
                 translateY: scrollA.interpolate({
@@ -234,6 +251,7 @@ const styles = StyleSheet.create({
         height:300,
     },
     titleContainer: {
+        marginTop: - (imageHeight/3),
         width: '100%',
         alignItems: 'center',
         backgroundColor: 'rgba(225, 0, 0, 0.0)',
@@ -242,7 +260,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 36,
         fontWeight: 'bold',
-        color: 'white',
+        color: themeColors.bgLight,
     },
     subtitleContainer: {
         alignItems: 'center',
@@ -252,13 +270,13 @@ const styles = StyleSheet.create({
     subtitle_lokalname: {
         fontSize: 16,
         fontStyle: 'normal',
-        color: 'white',
+        color: themeColors.bgLight,
         marginVertical: 10,
     },
     subtitle_ilmiahname: {
         fontSize: 16,
         fontStyle: 'italic',
-        color: 'white',
+        color: themeColors.bgLight,
     },
     cardContainer: {
         flexDirection: 'row',
@@ -269,7 +287,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '30%',
         borderRadius: 10,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.bgLight,
         shadowColor: '#000000',
         shadowOffset: {
             width: 0,
@@ -294,10 +312,10 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.bgLight,
         marginHorizontal: 5,
         borderRadius: 10,
-        shadowColor: 'white',
+        shadowColor: themeColors.lightCol,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -313,9 +331,8 @@ const styles = StyleSheet.create({
     },
     separator: {
         alignSelf: 'stretch',
-
         borderRadius: 5,
-        borderBottomColor: 'white',
+        borderBottomColor: themeColors.bgLight,
         marginVertical: 10,
     },
     section: {
@@ -325,19 +342,19 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'white',
+        color: themeColors.bgLight,
         marginBottom: 10,
         marginLeft: 10,
     },
     subSection: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.bgLight,
         borderRadius: 8,
         padding: 16,
         marginBottom: 10,
     },
     sectionText: {
         fontSize: 16,
-        color: '#051630',
+        color: themeColors.bgDark,
         padding: 5,
         textAlign: 'justify',
     },

@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { db } from '../firebaseConfig.js';
 import { onValue, ref } from 'firebase/database';
 import CustomButton from '../components/CustomButton.js';
-
+import { MagnifyingGlassIcon as MagnifyingGlassSolid } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 
 const SearchScreen = ({ navigation }) => {
@@ -57,41 +57,47 @@ const SearchScreen = ({ navigation }) => {
     };
 
     return (
-      <View style={styles.container}>  
-        <View style={styles.searchBar}>
-          <Ionicons name="ios-search" size={24} color="gray" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search here"
-            value={query}
-            onChangeText={setQuery}
-            onSubmitEditing={onSearchPressed} // Menambahkan onSubmitEditing untuk mengeksekusi fungsi search saat tombol "Enter" ditekan
-            returnKeyType="search" // Mengubah text pada tombol "Return" menjadi "Search"
-          />
-        </View>
-        <CustomButton  
-          onPress={onSearchPressed}
-          text='Search'
-          type='LIGHT'
-          width='90%'
-          height={50}
-          padding={12}
-          marginVertical={15}
-        />
-        {todoData.length > 0 ? (
-          <FlatList
-            data={todoData}
-            renderItem={renderSearchResult}
-            keyExtractor={(item) => item.id_spesies}
-            style={styles.resultContainer}
-            extraData={todoData}
-            virtualizedList={true} // Menambahkan properti virtualizedList
-          />
-        ) : (
-          <View style={{padding:10}}>
-            <Text style={{color: 'white', fontWeight:'bold', fontSize:16}}>No results found.</Text> 
+      <View style={styles.container}> 
+        <View style={styles.content}>
+          <View style={styles.searchBar}>
+            <MagnifyingGlassSolid size={30} color={themeColors.bgButton3} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search here"
+              value={query}
+              onChangeText={setQuery}
+              onSubmitEditing={onSearchPressed} // Menambahkan onSubmitEditing untuk mengeksekusi fungsi search saat tombol "Enter" ditekan
+              returnKeyType="search" // Mengubah text pada tombol "Return" menjadi "Search"
+            />
           </View>
-        )}
+          <CustomButton  
+            onPress={onSearchPressed}
+            text='Search'
+            type='LIGHT'
+            bgColor={themeColors.bgButton}
+            color={themeColors.bgLight}
+            width='90%'
+            height={50}
+            padding={12}
+            marginVertical={10}
+          />  
+        </View> 
+        <View style={styles.content2}>
+          {todoData.length > 0 ? (
+            <FlatList
+              data={todoData}
+              renderItem={renderSearchResult}
+              keyExtractor={(item) => item.id_spesies}
+              style={styles.resultContainer}
+              extraData={todoData}
+              virtualizedList={true} // Menambahkan properti virtualizedList
+            />
+          ) : (
+            <View style={{padding:10}}>
+              <Text style={{color: 'white', fontWeight:'bold', fontSize:16}}>No results found.</Text> 
+            </View>
+          )}
+        </View>
       </View>
     );
 };
@@ -99,17 +105,26 @@ const SearchScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     alignItems:'center',
-    backgroundColor:'#051630',
-    paddingBottom: 0,
+    backgroundColor:themeColors.bgDark,
+  },
+  content: {
+    width:'100%',
+    alignItems:'center',
+    backgroundColor:themeColors.bgDark,
+  },
+  content2: {
+    flex:1,
+    width:'100%',
+    backgroundColor:themeColors.bgLight,
+    borderRadius:10,
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: themeColors.bgLight,
     borderRadius: 75,
-    padding: 8,
+    paddingHorizontal: 10,
     width: '90%',
     height: 50,
     shadowColor: '#000',
@@ -120,39 +135,43 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 100,
     elevation: 5,
+    marginTop: 15,
 
   },
   searchInput: {
     marginLeft: 8,
+    color:themeColors.bgDark,
+    fontWeight:'bold',
     fontSize: 16,
     flex: 1,
-    padding: 0,
   },
   resultContainer: {
     flex: 1,
     width:"100%",
+    paddingHorizontal:20,
+    marginVertical: 15,
     contentContainerStyle:{alignItems:'center'},
-    marginBottom:25,
-    
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: themeColors.bgLight,
+    backgroundColor: themeColors.bgButton,
     borderRadius: 20,
     paddingHorizontal: 8,
-    paddingVertical:1,
+    paddingVertical:5,
     marginBottom: 15,
     width:"100%",
   },
   cardImage: {
     width: '40%',
     height: 100,
-    resizeMode: 'contain', 
+    borderRadius:20,
+    resizeMode: 'contain',
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: themeColors.bgLight,
     marginBottom: 2,
     marginTop:15,
     flex: 1,
@@ -169,7 +188,7 @@ const styles = StyleSheet.create({
   },
   cardDetailsText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: themeColors.bgLight,
     marginLeft: 4,
   },
 });
