@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
-import { app } from '../firebaseConfig';
+import { app, firestoreDb } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
 const SignUpScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
@@ -15,45 +16,63 @@ const SignUpScreen = ({navigation}) => {
 
     const registerUser = async (email, password) => {
         try {
-          const signInMethods = await app.auth().fetchSignInMethodsForEmail(email);
-          if (signInMethods && signInMethods.length > 0) {
-            setIsEmailRegistered(true);
-            return null;
-          }
+            const signInMethods = await app.auth().fetchSignInMethodsForEmail(email);
+            if (signInMethods && signInMethods.length > 0) {
+                setIsEmailRegistered(true);
+                return null;
+             }
     
-          const userCredential = await app.auth().createUserWithEmailAndPassword(email, password);
-          const user = userCredential.user;
+            const userCredential = await app.auth().createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
     
-          await user.updateProfile({
-            displayName: username
-          });
-          return user;
-        } catch (error) {
-          //console.error(error);
-          throw error;
+            await user.updateProfile({
+                displayName: username
+            });
+
+            // after updating profile, save user to Firestore
+            const userProfile = {
+                username: username,
+                email: user.email,
+                created_at: new Date().toISOString(), // current date and time in ISO format
+                email_verified: user.emailVerified,
+                // any other fields you want to include
+            };
+        
+            // after updating profile, save user to Firestore
+            await setDoc(doc(firestoreDb, 'users', user.uid), userProfile);
+
+            // send email verification
+            await user.sendEmailVerification();
+
+            return user;
+
+        }   catch (error) {
+            //console.error(error);
+            throw error;
         }
     };
     
     const onRegisterPressed = async () => {
         try {
-          validateForm();
-          const newUser = await registerUser(email, password);
+            if (!validateForm()) {
+                throw new Error('Invalid form data');
+            }
+            const newUser = await registerUser(email, password);
+        
+            if (newUser != null) {
+                navigation.navigate('ConfirmEmail');
+            }
     
-          if (newUser != null) {
-            navigation.navigate('ConfirmEmail');
-          }
-    
-        } catch (error) {
-          //console.error(error);
-          if (isEmailRegistered) {
-            setErrorMessage('This email is already registered');
-          } else if (error.code === 'auth/invalid-email') {
-            setErrorMessage('Invalid email');
-          } else {
-            setErrorMessage(error.message);
-          }
+            } catch (error) {
+            if (isEmailRegistered) {
+                setErrorMessage('This email is already registered');
+            } else if (error.code === 'auth/invalid-email') {
+                setErrorMessage('Invalid email');
+            } else {
+                setErrorMessage(error.message);
+            }
         } finally {
-          setIsEmailRegistered(false);
+            setIsEmailRegistered(false);
         }
     };
 

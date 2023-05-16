@@ -5,6 +5,8 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { firestoreDb } from '../firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = ({navigation}) => {
@@ -23,6 +25,27 @@ const SignInScreen = ({navigation}) => {
         } catch (error) {
           console.log('Error saving access token to AsyncStorage:', error);
         }
+    };
+
+    const checkEmailVerificationStatus = (user) => {
+        const checkInterval = setInterval(async () => {
+            // Refresh user data
+            await user.reload();
+    
+            if (user.emailVerified) {
+                // Stop checking once the email is verified
+                clearInterval(checkInterval);
+    
+                // Update the Firestore document
+                const userProfile = {
+                    username: user.displayName,
+                    email: user.email,
+                    created_at: new Date().toISOString(),
+                    email_verified: user.emailVerified,
+                };
+                await setDoc(doc(firestoreDb, 'users', user.uid), userProfile, {merge: true});
+            }
+        }, 5000); // Check every 5 seconds
     };
 
     const loginUser = async (username, password) => {
@@ -61,6 +84,7 @@ const SignInScreen = ({navigation}) => {
         try {
             const authorized = await loginUser(username, password);
             if (authorized) {
+                checkEmailVerificationStatus(auth.currentUser);
                 navigation.navigate('Main');
             } else {
                 setErrorMessage('Unauthorized access.');
