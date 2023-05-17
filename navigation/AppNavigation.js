@@ -36,6 +36,7 @@ import PremiumScreen from '../screens/PremiumScreen';
 import ChatBotScreen from '../screens/ChatBotScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingScreen from '../screens/SettingScreen';
+import ProfileSettingScreen from '../screens/ProfileSettingScreen';
 // - Header
 import ScreenHeader from '../components/ScreenHeader';
 // - Passing data and update
@@ -87,8 +88,15 @@ const StackNavigator = () => {
           headerShown: false,
           contentStyle: {backgroundColor: themeColors.bgDark}}}
       >
-        
+        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
+        <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
+        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
+        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
         <Stack.Screen name="Main" component={DrawerNavigation} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}/>
+        <Stack.Screen name="ProfileSetting" component={ProfileSettingScreen}></Stack.Screen>
+
 
         <Stack.Screen
           name="DetailFishScreen"
@@ -138,7 +146,7 @@ const BottomTabNavigation = () => {
 
   return (
       <Tab.Navigator
-          initialRouteName="Main"
+          initialRouteName="Home"
           screenOptions={({ route }) => ({
               headerShown: true,
               tabBarShowLabel: false,
