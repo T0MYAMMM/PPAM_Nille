@@ -1,80 +1,32 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Animated, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Animated, Dimensions, Button } from 'react-native';
 import { themeColors } from '../theme';
-import moment from 'moment';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const cardWidth = 0.8*width
 
-
-const TaskList = [
+const AquariumList = [
   {
-      id: '1',
-      date: new Date(), // date hari ini
-      tasks: [
-        {
-          time: '06.00',
-          task: 'Feed aquarium a',
-        },
-        {
-          time: '12.00',
-          task: 'Feed aquarium b',
-        },
-      ],
+    id: '1',
+    speciesId: 'species1',
+    size: 'small',
+    cleaningSchedule: 'weekly',
+    filterType: 'external',
   },
-  {
-      id: '2',
-      date: new Date(Date.now() - 86400000), // date kemarin
-      tasks: [
-        {
-          time: '12.00',
-          task: 'Feed aquarium c',
-        },
-        {
-          time: '18.00',
-          task: 'Feed aquarium d',
-        },
-      ],
-  },
-  {
-      id: '3',
-      date: new Date(Date.now() + 86400000), // date besok
-      tasks: [
-        {
-          time: '18.00',
-          task: 'Feed aquarium e',
-        },
-        {
-          time: '24.00',
-          task: 'Feed aquarium f',
-        },
-      ],
-  },
+  // tambahkan sebanyak yang dibutuhkan
 ];
 
-// Fungsi untuk membandingkan date, jika date sama return 'Hari ini', jika date kemarin return 'Kemarin', jika date besok return 'Besok'
-const getDateLabel = (date) => {
-  const today = moment();
-  const taskDate = moment(date);
-  
-  if (taskDate.isSame(today, 'day')) {
-    return 'Hari Ini';
-  } else if (taskDate.isSame(moment().subtract(1, 'days'), 'day')) {
-    return 'Kemarin';
-  } else if (taskDate.isSame(moment().add(1, 'days'), 'day')) {
-    return 'Besok';
-  } else {
-    return taskDate.format('DD MMM YYYY'); // Jika tidak termasuk hari ini, kemarin, atau besok, format date menjadi 'DD MMM YYYY'
-  }
-}
-
 const carouselAquarium = () => {
+    const navigation = useNavigation();
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const flatlistRef = useRef(null);
-    const tasksSortedByDate = [...TaskList].sort((a, b) => a.date - b.date);
-    const todayIndex = tasksSortedByDate.findIndex(task => getDateLabel(task.date) === 'Hari Ini');
+    const todayIndex = currentIndex; // Selalu mulai dari aquarium pertama
+
+    const id_spesies = "aa01";
 
     useEffect(() => {
       if (flatlistRef.current) {
@@ -90,15 +42,17 @@ const carouselAquarium = () => {
     }
 
     const viewableItemsChanged = useRef(({ viewableItems }) => {
-      setCurrentIndex(viewableItems[0].index)
-    }).current;
+        if (viewableItems && viewableItems.length > 0) {
+          setCurrentIndex(viewableItems[0].index);
+        }
+      }).current;
 
     const viewConfig = useRef({ viewAreaCoveragePercentThreshold:  50 }).current;
-  
+
     return (
       <View style={styles.container}>
         <FlatList 
-          data={tasksSortedByDate}
+          data={AquariumList}
           renderItem={({ item, index }) => {
             const inputRange = [
               (index - 1) * width,
@@ -110,82 +64,75 @@ const carouselAquarium = () => {
               inputRange,
               outputRange: [0.5, 1, 0.3]
             });
-  
+
+            const onCardPress = () => {
+                navigation.navigate('AquariumDetailScreen');
+            };
+
             return (
-              <Animated.View style={{...styles.box, opacity}}>
-                <Text style={styles.dateTitle}>{getDateLabel(item.date)}</Text>
-                <FlatList
-                  data={item.tasks}
-                  keyExtractor={(task, taskIndex) => `${item.id}-task-${taskIndex}`}
-                  renderItem={({ item: task }) => (
-                    <View style={styles.taskContainer}>
-                      <Text style={styles.time}>{task.time}</Text>
-                      <Text style={styles.task}>{task.task}</Text>
-                    </View>
-                  )}
-                  style={{flex: 1}}
-                />
-              </Animated.View>
+              <TouchableOpacity onPress={onCardPress}>
+                <Animated.View style={{...styles.box, opacity}}>
+                  <Text style={styles.title}>Aquarium {item.id}</Text>
+                  <Text style={styles.detail}>Species ID: {item.speciesId}</Text>
+                  <Text style={styles.detail}>Size: {item.size}</Text>
+                  <Text style={styles.detail}>Cleaning Schedule: {item.cleaningSchedule}</Text>
+                  <Text style={styles.detail}>Filter Type: {item.filterType}</Text>
+                </Animated.View>
+              </TouchableOpacity>
             );
           }}
           keyExtractor={item => item.id}
           bounces={false}
           horizontal
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
           pagingEnabled
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver:  false })}
           scrollEventThrottle={32}
           onViewableItemsChanged={viewableItemsChanged}
           viewabilityConfig={viewConfig} 
           ref={flatlistRef}
           onScrollToIndexFailed={onScrollToIndexFailed}
+          ListFooterComponent={() => (
+            <View style={{ width: cardWidth, justifyContent: 'center', alignItems: 'center', margin: 20 }}>
+              <Button 
+                title="Tambah Aquarium"
+                onPress={() => navigation.navigate('AddAquariumScreen')}
+              />
+            </View>
+          )}
         />
       </View>
     );
-  };
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',        
-      alignItems: 'center',
-    },
-    taskContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 10,
-    },
-    box: {
-      flex:1,
-      height:200,
-      width: cardWidth,
-      margin: 20,
-      borderRadius: 20,
-      backgroundColor: themeColors.Blue,
-      alignItems:'center',
-      justifyContent:'center',
-      padding:20,
-    },
-    dateTitle: {
-      fontSize:24,
-      fontWeight: '800',
-      marginBottom:10,
-      color: themeColors.bgLight,
-      textAlign: 'center',
-    },
-    time: {
-      fontSize:20,
-      fontWeight: '800',
-      marginRight: 10,
-      color: themeColors.bgLight,
-      textAlign: 'center'
-    },
-    task: {
-      fontSize:17,
-      color: themeColors.bgLight,
-      textAlign: 'center'
-    },
-  });
-  
-  export default carouselAquarium;
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',        
+    alignItems: 'center',
+  },
+  box: {
+    height:200,
+    width: cardWidth,
+    margin: 20,
+    borderRadius: 20,
+    backgroundColor: themeColors.Blue,
+    alignItems:'center',
+    justifyContent:'center',
+    padding:20,
+  },
+  title: {
+    fontSize:24,
+    fontWeight: '800',
+    marginBottom:10,
+    color: themeColors.bgLight,
+    textAlign: 'center',
+  },
+  detail: {
+    fontSize:17,
+    color: themeColors.bgLight,
+    textAlign: 'center'
+  },
+});
+
+export default carouselAquarium;

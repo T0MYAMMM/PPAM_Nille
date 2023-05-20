@@ -5,8 +5,6 @@ import { get, ref, onValue } from 'firebase/database';
 import { db } from '../firebaseConfig';
 import { themeColors } from '../theme';
 
-import ScreenHeader from '../components/ScreenHeader';
-
 const { width: screenWidth } = Dimensions.get('window');
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -50,22 +48,6 @@ const DetailFishScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.root}>
-            <ScreenHeader 
-                title={"Fish Information"}
-                headerBg={themeColors.bgDark}
-                iconColor={themeColors.bgLight}
-                titleAlign='center'
-                back
-                onMenuPress={() => navigation.goBack()}
-                right='more-vertical'
-                rightFunction={() => console.log('right')}
-                optionalIcon='bell'
-                optionalFunc={() => console.log('optional')}
-                optionalbadge={5}
-                navigation={navigation}
-                titleColor={themeColors.bgLight}
-            />
-
             <Animated.ScrollView
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { y: scrollA } } }],
@@ -212,7 +194,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 20,
         marginVertical:20,
-        marginBottom: 70,
+        marginBottom: 30,
     },
     bannerContainer: {
         alignItems: 'center',

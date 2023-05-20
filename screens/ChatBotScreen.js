@@ -5,7 +5,7 @@ import { themeColors } from '../theme';
 
 const ChatBotScreen = () => {
   const [data, setData] = useState([]);
-  const apiKey = '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';
+  const apiKey = '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';
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
   const [textInput, setTextInput] = useState('');
 
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
   message: {
     borderRadius: 4,
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 4,
+    paddingVertical: 10,
+    marginVertical: 10,
   },
   userMessage: {
     alignSelf: 'flex-end',

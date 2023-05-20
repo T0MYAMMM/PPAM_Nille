@@ -28,6 +28,8 @@ import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import GetStartedScreen from '../screens/GetStartedScreen';
 import UploadImageScreen from '../screens/UploadImageScreen';
 import DetailFishScreen from '../screens/DetailFishScreen';
+import AddAquariumScreen from '../screens/AddAquariumScreen';
+import AquariumDetailScreen from '../screens/AquariumDetailScreen';
 // - Bottom Tab
 import HomeScreen from '../screens/HomeScreen';
 import MyAquariumScreen from '../screens/MyAquariumScreen';
@@ -50,6 +52,40 @@ const Drawer = createDrawerNavigator();
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
+
+const CustomHeader = ({ title1, title2, onBackPress }) => {
+  const navigation = useNavigation();
+
+  if (onBackPress) {
+    return (
+      <ScreenHeader
+        title1={title1}
+        title2={title2}
+        headerBg={themeColors.bgDark}
+        iconColor={themeColors.bgLight}
+        back
+        onMenuPress={onBackPress}
+        optionalbadge={5}
+        navigation={navigation}
+        titleColor={themeColors.bgLight}
+      />
+    );
+  } else {
+    return (
+      <ScreenHeader
+        title1={title1}
+        title2={title2}
+        headerBg={themeColors.bgDark}
+        iconColor={themeColors.bgLight}
+        menu
+        onMenuPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+        optionalbadge={5}
+        navigation={navigation}
+        titleColor={themeColors.bgLight}
+      />
+    );
+  }
+};
 
 //Stack Navigation
 const StackNavigator = () => {
@@ -88,12 +124,7 @@ const StackNavigator = () => {
           headerShown: false,
           contentStyle: {backgroundColor: themeColors.bgDark}}}
       >
-        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
-        <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
-        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
-        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
+        
         <Stack.Screen name="Main" component={DrawerNavigation} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}/>
         <Stack.Screen name="ProfileSetting" component={ProfileSettingScreen} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}></Stack.Screen>
 
@@ -105,11 +136,47 @@ const StackNavigator = () => {
             const { fishId } = route.params;
             const fish = fishData.find((item) => item.id_spesies === fishId);
             return {
-              title: fish ? fish.name : "Detail", // Mengubah judul header
-              headerStyle: { backgroundColor: themeColors.bgLight }, // Mengubah background color header
-              headerTintColor: themeColors.bgDark, // Mengubah warna teks dan tombol kembali
-              contentStyle: {backgroundColor: themeColors.bgDark}
+              headerShown: true,
+              header: () => (
+                <CustomHeader
+                  title1={fish ? fish.name : "Detail"}
+                  title2=""
+                  onBackPress={true} // Menggunakan fungsi goBack
+                />
+              ),
+              headerStyle: { backgroundColor: themeColors.bgLight },
+              headerTintColor: themeColors.bgDark,
+              contentStyle: { backgroundColor: themeColors.bgDark },
             };
+          }}
+        />
+
+        <Stack.Screen
+          name="AddAquariumScreen"
+          component={AddAquariumScreen}
+          options={{
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="add new" 
+                title2="Aquarium!" 
+              />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="AquariumDetailScreen"
+          component={AquariumDetailScreen}
+          options={{
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Aquarium" 
+                title2="Detail" 
+                
+              />
+            ),
           }}
         />
           
@@ -125,23 +192,6 @@ const StackNavigator = () => {
 };
 
 const BottomTabNavigation = () => {
-  const CustomHeader = ({ title1, title2 }) => {
-    const navigation = useNavigation();
-    return (
-      <ScreenHeader
-        title1={title1}
-        title2={title2}
-        headerBg={themeColors.bgDark}
-        iconColor={themeColors.bgLight}
-        menu
-        onMenuPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-        optionalbadge={5}
-        navigation={navigation}
-        titleColor={themeColors.bgLight}
-      />
-    );
-  };
-
   return (
     
       <Tab.Navigator

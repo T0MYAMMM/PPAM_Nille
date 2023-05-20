@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Animated, Dimensions } from 'react-native';
 import { themeColors } from '../theme';
 import moment from 'moment';
+import Paginator from './paginator';
 
 const { width } = Dimensions.get('window');
 const cardWidth = 0.8*width
@@ -131,7 +132,7 @@ const carouselToDo = () => {
           keyExtractor={item => item.id}
           bounces={false}
           horizontal
-          showsHorizontalScrollIndicator={true}
+          showsHorizontalScrollIndicator={false}
           pagingEnabled
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
           scrollEventThrottle={32}
@@ -140,6 +141,8 @@ const carouselToDo = () => {
           ref={flatlistRef}
           onScrollToIndexFailed={onScrollToIndexFailed}
         />
+
+        <Paginator data={TaskList} scrollX={scrollX}/>
       </View>
     );
   };

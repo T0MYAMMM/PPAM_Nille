@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet, useWindowDimensions, ScrollView } from '
 import React, {useState} from 'react';
 import Logo from '../assets/images/login_logo.png';
 import CustomButton from '../components/CustomButton';
+import { themeColors } from '../theme';
+import { theme } from 'native-base';
 
 const GetStartedScreen = ({navigation}) => {
     const {height} = useWindowDimensions();   
@@ -25,9 +27,7 @@ const GetStartedScreen = ({navigation}) => {
 
             <CustomButton 
                 text = 'Get Started With Nille' 
-                bgColor={'white'} 
-                width={250} 
-                color={'#051630'} 
+                width={250}  
                 onPress={onStartedPressed}
                 type={'LIGHT'}
                 fontSize={16}
@@ -38,7 +38,6 @@ const GetStartedScreen = ({navigation}) => {
                 text = "Already a member? Sign in here" 
                 onPress={onSignInPressed} 
                 type='TEXT'
-                color={'white'}
                 fontWeight={'bold'}
                 fontSize={16}
                 marginVertical={5}
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent:'center',
         padding: 20,
-        backgroundColor:'#051630',
+        backgroundColor:themeColors.bgDark,
     },
     logo : {
         flexDirection:'column',
