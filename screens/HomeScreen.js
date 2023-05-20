@@ -6,6 +6,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { themeColors } from '../theme';
+import CarouselToDo from '../components/carouselToDo';
 
 
 const HomeScreen = () => {
@@ -35,9 +36,15 @@ const HomeScreen = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.container}>
         <View style={styles.content}>
+                
           <Text style={styles.titleText}>Welcome to Nille</Text>
 
           <Text style={styles.subTitleText}> Disini ada upcoming to do </Text>
+
+          <View style={styles.carouselContainer}>
+            <CarouselToDo/>
+          </View>
+
 
           <CustomButton
             text={"Logout"}
@@ -76,6 +83,10 @@ const styles = StyleSheet.create({
       textAlign:'center', 
       paddingTop:10, 
       paddingBottom:20,
+    },
+    carouselContainer: {
+      height: 240, // adjust this value as needed
+      marginBottom: 20, // adjust this value as needed
     },
 });
 

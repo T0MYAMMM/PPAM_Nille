@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { app } from '../firebaseConfig';
+import { themeColors } from '../theme';
 
 const ResetPasswordScreen = ({ route, navigation }) => {
     const [password, setPassword] = useState('');

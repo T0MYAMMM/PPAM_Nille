@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
+import { themeColors } from '../theme';
+import { theme } from 'native-base';
+import CarouselAquarium from '../components/carouselAquarium';
 
 function MyAquariumScreen(){
     const navigation = useNavigation();
@@ -16,6 +19,11 @@ function MyAquariumScreen(){
                 onPress={() => navigation.navigate('Home')}
                 style={styles.titleText}>Add your fish sites</Text>
             <Text style={styles.subTitleText}>This is where your growing sites will be listed. You can add sites by tapping the button below.</Text>
+            
+            <View style={styles.carouselContainer}>
+              <CarouselAquarium/>
+            </View>
+            
             <CustomButton
                 text = 'Tombol'
                 onPress={onLogoutPressed} 
@@ -33,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: '#051630',
+    backgroundColor: themeColors.bgDark,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -51,6 +59,10 @@ const styles = StyleSheet.create({
     textAlign:'center', 
     padding: 10,
     marginHorizontal: 30, 
+  },
+  carouselContainer: {
+    height: 240, // adjust this value as needed
+    marginBottom: 20, // adjust this value as needed
   },
 });
 

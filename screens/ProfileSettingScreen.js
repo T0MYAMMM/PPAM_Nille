@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import { themeColors } from '../theme';
 
 const ProfileSettingScreen = () => {
     const [name, setName] = useState('');

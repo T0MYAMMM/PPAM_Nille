@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { db } from '../firebaseConfig.js';
 import { onValue, ref } from 'firebase/database';
 import CustomButton from '../components/CustomButton.js';
 import { MagnifyingGlassIcon as MagnifyingGlassSolid } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
+import FishCard from '../components/FishCard.js';
 
 const SearchScreen = ({ navigation }) => {
     const [allData, setAllData] = useState([]);
@@ -33,26 +33,17 @@ const SearchScreen = ({ navigation }) => {
     };
 
     const renderSearchResult = ({ item }) => {
-      //const images = item.image;
+    
       return (
-        <TouchableOpacity style={styles.card} onPress={() => {
+        <FishCard
+          nama_populer={item.nama_populer}
+          asal={item.asal}
+          ukuran={item.ukuran_maksimum}
+          imageUrl={item.imageUrl}
+          onPress={() => {
             navigation.navigate('DetailFishScreen', { fishId: item.id_spesies })
           }}
-        >
-          
-          <Image
-            style={styles.cardImage}
-            source={{uri: item.imageUrl}}
-            resizeMode="contain"
-          />
-          <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{item.nama_populer}</Text>
-            <View style={styles.cardDetails}>
-              <Text style={styles.cardDetailsText}>{item.asal}</Text>
-              <Text style={styles.cardDetailsText}>{item.ukuran_maksimum}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        />
       );
     };
 
@@ -74,7 +65,7 @@ const SearchScreen = ({ navigation }) => {
             onPress={onSearchPressed}
             text='Search'
             type='LIGHT'
-            bgColor={themeColors.bgButton}
+            bgColor={themeColors.Red}
             color={themeColors.bgLight}
             width='90%'
             height={50}
@@ -94,7 +85,7 @@ const SearchScreen = ({ navigation }) => {
             />
           ) : (
             <View style={{padding:10}}>
-              <Text style={{color: 'white', fontWeight:'bold', fontSize:16}}>No results found.</Text> 
+              <Text style={{color: themeColors.bgLight, fontWeight:'bold', fontSize:16}}>No results found.</Text> 
             </View>
           )}
         </View>
@@ -111,13 +102,12 @@ const styles = StyleSheet.create({
   content: {
     width:'100%',
     alignItems:'center',
-    backgroundColor:themeColors.bgDark,
+    
   },
   content2: {
     flex:1,
     width:'100%',
-    backgroundColor:themeColors.bgLight,
-    borderRadius:10,
+    alignItems:'center',
   },
   searchBar: {
     flexDirection: 'row',
@@ -147,10 +137,13 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     flex: 1,
+    contentContainerStyle:{alignItems:'center'},
+
     width:"100%",
+    
     paddingHorizontal:20,
     marginVertical: 15,
-    contentContainerStyle:{alignItems:'center'},
+    
   },
   card: {
     flexDirection: 'row',

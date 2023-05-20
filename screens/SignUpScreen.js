@@ -5,8 +5,9 @@ import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
 import { app, firestoreDb } from '../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
+import { themeColors } from '../theme';
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({navigation}) =>  {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -189,7 +190,7 @@ const SignUpScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     root: {
         flex:1,
-        backgroundColor:'#051630',
+        backgroundColor:themeColors.bgDark,
     },
     scrollViewContent: {
         flexGrow: 1,
@@ -199,21 +200,21 @@ const styles = StyleSheet.create({
     },
     text : {
         textAlign: 'center',
-        color: 'white',
+        color: themeColors.bgLight,
         marginVertical: 10,
         marginHorizontal: 50,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: 'white',
+        color: themeColors.bgLight,
         margin: 20,
     },
     link: {
         color: '#FDB075',
     },
     errorText: {
-        color: '#fa5e2a',
+        color: themeColors.Red,
         marginHorizontal:40,
         marginBottom:10,
         textAlign: 'center',

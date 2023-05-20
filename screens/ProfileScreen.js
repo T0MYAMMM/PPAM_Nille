@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { themeColors } from '../theme';
 
 const ProfileScreen = ({ navigation }) => {
     const profile = {

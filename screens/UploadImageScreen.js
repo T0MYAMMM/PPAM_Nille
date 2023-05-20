@@ -6,6 +6,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import moment from 'moment';
 import CustomButton from '../components/CustomButton';
 import ImageUploadContext from './ImageUploadContext';
+import { themeColors } from '../theme';
 
 const UploadImageScreen = ({ navigation, route }) => {
 
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#051630',
+    backgroundColor: themeColors.bgDark,
     alignItems: 'center',
     justifyContent: 'center',
   },

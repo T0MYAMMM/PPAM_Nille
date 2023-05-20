@@ -4,6 +4,7 @@ import CustomButton from '../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from '../firebaseConfig';
+import { themeColors } from '../theme';
 
 const ConfirmEmailScreen = () => {
     const navigation = useNavigation();
@@ -55,23 +56,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor:'#051630',
+        backgroundColor:themeColors.bgDark,
         justifyContent: 'center',
     },
     text : {
-        color: 'white',
+        color: themeColors.bgLight,
         marginVertical: 10,
         textAlign: 'center',
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: 'white',
+        color: themeColors.bgLight,
         margin: 10,
         textAlign: 'center',
     },
     errorText: {
-        color: '#fa5e2a',
+        color: themeColors.Red,
         marginHorizontal:40,
         marginBottom:10,
         textAlign: 'center',

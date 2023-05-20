@@ -1,12 +1,14 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store/store';
 import {SafeAreaView, StyleSheet, Text,} from 'react-native';
 import AppNavigation from './navigation/AppNavigation';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.root}>
-      <AppNavigation/>
-    </SafeAreaView>
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
   );
 };
 

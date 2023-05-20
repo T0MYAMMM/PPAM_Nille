@@ -5,6 +5,7 @@ import { storage } from '../firebaseConfig';
 import { getDownloadURL, ref, listAll } from 'firebase/storage';
 import CustomButton from '../components/CustomButton';
 import ImageUploadContext from './ImageUploadContext';
+import { themeColors } from '../theme';
 
 const PremiumScreen = () => {
   const navigation = useNavigation();
@@ -75,18 +76,18 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     padding: 20,
-    backgroundColor: '#051630',
+    backgroundColor: themeColors.bgDark,
   },
   titleText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: 'white',
+    color: themeColors.bgLight,
     paddingTop: 20,
   },
   subTitleText: {
     fontSize: 16,
-    color: 'white',
+    color: themeColors.bgLight,
     fontWeight: 'normal',
     textAlign: 'center',
     paddingTop: 10,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   item: {
     alignItems:'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.Purple,
     width: '30%',
     borderRadius: 10,
     marginBottom: 20,

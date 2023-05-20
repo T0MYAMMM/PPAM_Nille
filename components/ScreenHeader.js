@@ -1,36 +1,45 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge, Surface, Title } from 'react-native-paper';
-import { Feather } from '@expo/vector-icons';
+
+import { BellIcon as BellOutline, ArrowLeftIcon } from 'react-native-heroicons/outline';
 import { Bars3Icon as Bars3Solid, BellIcon as BellSolid } from 'react-native-heroicons/solid';
+import { themeColors } from '../theme';
 
 const IconSize = 30;
 
-const ScreenHeader = ({ menu, onMenuPress, back, title, right, rightFunction, optionalIcon, optionalFunc, navigation, headerBg, iconColor, titleAlign, optionalbadge, titleColor }) => {
+const ScreenHeader = ({ menu, onMenuPress, back, title1, title2, opennotif, navigation, headerBg, iconColor, optionalbadge, titleColor }) => {
   return (
     <Surface style={[styles.header, {backgroundColor:  headerBg}]}>
-      <View style={styles.view}>
-        {menu && <TouchableOpacity onPress={onMenuPress}>
-            <Bars3Solid name="menu" size={IconSize} color={iconColor}/>
+
+      <View style={styles.container}>
+
+        { menu && <TouchableOpacity style={styles.button} onPress={onMenuPress}>
+            <Bars3Solid name="menu" size={22} color={iconColor}/>
         </TouchableOpacity>}
 
-        {back && <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Feather name="arrow-left" size={IconSize} color={iconColor}/>
-        </TouchableOpacity>}
+        { back && <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+            <ArrowLeftIcon name="arrow-left" size={IconSize} color={iconColor}/>
+        </TouchableOpacity> }
+
       </View>
 
       <View style={styles.titleView}>
-        <Title style={[styles.titleText, {color:titleColor},{textAlign: titleAlign}]}>{title}</Title>
+        
+        <Title style={[styles.titleText1, {color:titleColor}]}>{title1}</Title>
+        <Title style={[styles.titleText2, {color:titleColor}]}>{title2}</Title>
+      
+      
       </View>
 
-      <View style={[styles.view, styles.rightView]}>
-        {optionalFunc && <TouchableOpacity style={styles.rowView} onPress={optionalFunc}>
-            <BellSolid name={optionalIcon} size={IconSize} color={iconColor}/>
-            <Badge style={{position:'absolute', top:-5, right:-10, }}>{optionalbadge}</Badge>
-        </TouchableOpacity>}
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button} onPress={opennotif}>
 
-        {rightFunction && <TouchableOpacity onPress={rightFunction}>
-            <Feather name={right} size={IconSize} color={iconColor}/>
-        </TouchableOpacity>}
+            <BellOutline name="bell-notif" size={20} color={iconColor}/>
+            
+            <Badge style={{position:'absolute', top:-5, right:-5, }}>{optionalbadge}</Badge>
+        
+        </TouchableOpacity>
+
       </View>
     </Surface>
   );
@@ -38,37 +47,49 @@ const ScreenHeader = ({ menu, onMenuPress, back, title, right, rightFunction, op
 
 const styles = StyleSheet.create({
     header: {
-        height:70,
+        height: 80,
         elevation:4,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: 'black',
-        paddingTop: 20,
+        marginTop:25,
+        padding: 10,
     },
-    view: {
-        margin:10,
+    container: {
         alignItems:'center',
         flexDirection:'row',
+        marginHorizontal:15,
+        marginTop:10,
     },
     titleView: { 
         flex:1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection:'column',
+        marginLeft:10,
+        marginTop:10,
     },
-    titleText: 
+    titleText1: 
     {
-        fontFamily: 'sans-serif', 
+        marginBottom:-5,
+        textAlign:'left',
+        fontSize: 15, 
+        color: 'white',
+    },
+    titleText2: 
+    {
+        marginTop:-5,
+        textAlign:'left',
         fontWeight:'bold', 
-        fontSize: 20, 
-        color: 'white' 
+        fontSize: 17, 
+        color: 'white',
     },
-    rightView: {
-        justifyContent: 'flex-end',
-    },
-    rowView: {
-        flexDirection: 'row',
+    button: {
         alignItems: 'center',
-        marginRight: 10,
+        justifyContent:'center',
+        width:50,
+        height:50,
+        backgroundColor: themeColors.DarkBlue,
+        borderRadius:15,
     },
     
 });

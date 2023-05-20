@@ -95,7 +95,7 @@ const StackNavigator = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
         <Stack.Screen name="Main" component={DrawerNavigation} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}/>
-        <Stack.Screen name="ProfileSetting" component={ProfileSettingScreen}></Stack.Screen>
+        <Stack.Screen name="ProfileSetting" component={ProfileSettingScreen} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}></Stack.Screen>
 
 
         <Stack.Screen
@@ -108,6 +108,7 @@ const StackNavigator = () => {
               title: fish ? fish.name : "Detail", // Mengubah judul header
               headerStyle: { backgroundColor: themeColors.bgLight }, // Mengubah background color header
               headerTintColor: themeColors.bgDark, // Mengubah warna teks dan tombol kembali
+              contentStyle: {backgroundColor: themeColors.bgDark}
             };
           }}
         />
@@ -115,6 +116,7 @@ const StackNavigator = () => {
         <Stack.Screen
           name="UploadImageScreen"
           component={UploadImageScreen}
+          options={{contentStyle: {backgroundColor: themeColors.bgDark}}}
           initialParams={{ handleImageUpload: handleImageUpload }}
         />
       </Stack.Navigator>
@@ -123,20 +125,16 @@ const StackNavigator = () => {
 };
 
 const BottomTabNavigation = () => {
-  const CustomHeader = ({ title }) => {
+  const CustomHeader = ({ title1, title2 }) => {
     const navigation = useNavigation();
     return (
       <ScreenHeader
-        title={title}
-        headerBg={themeColors.bgButton}
+        title1={title1}
+        title2={title2}
+        headerBg={themeColors.bgDark}
         iconColor={themeColors.bgLight}
-        titleAlign='center'
         menu
         onMenuPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-        right='more-vertical'
-        rightFunction={() => console.log('right')}
-        optionalIcon='bell'
-        optionalFunc={() => console.log('optional')}
         optionalbadge={5}
         navigation={navigation}
         titleColor={themeColors.bgLight}
@@ -145,6 +143,7 @@ const BottomTabNavigation = () => {
   };
 
   return (
+    
       <Tab.Navigator
           initialRouteName="Home"
           screenOptions={({ route }) => ({
@@ -154,37 +153,41 @@ const BottomTabNavigation = () => {
               tabBarStyle: {
                 marginBottom: 25,
                 borderRadius: 50,
+                borderTopWidth:0,
                 marginHorizontal: 20,
-                backgroundColor: themeColors.bgLight,
+                backgroundColor: themeColors.DarkBlue,
               },
               tabBarItemStyle: {
                 marginTop: 5,
+              }, 
+              cardStyle: {
+                backgroundColor: themeColors.bgDark,
               }
           })}
       >
           <Tab.Screen name="home" component={HomeScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title="Home" />
+                <CustomHeader title1="Hi Tom" title2="Welcome!" />
               ),
             })}/>
           <Tab.Screen name="aquarium" component={MyAquariumScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title="MyAquarium"/>
+                <CustomHeader title1="Hi Tom" title2="Welcome!"/>
               ),
             })}/>
           <Tab.Screen name="search" component={SearchScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title="Search" />
+                <CustomHeader title1="Hi Tom" title2="Welcome!" />
               ),
             })}/>
           <Tab.Screen name="nille" component={ChatBotScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title="Nille" />
+                <CustomHeader title1="Hi Tom" title2="Welcome!" />
               ),
             })}/>
           <Tab.Screen name="premium" component={PremiumScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title="Premium"/>
+                <CustomHeader title1="Hi Tom" title2="Welcome!" />
               ),
             })}/>  
       </Tab.Navigator>
@@ -195,19 +198,19 @@ const menuIcons = (route, focused)=> {
   let icon;
   
   if (route.name === 'home') {
-    icon =  focused? <HomeSolid size="30" color={themeColors.bgLight} /> : <HomeOutline size="30" strokeWidth={2} color={themeColors.bgButton} />
+    icon =  focused? <HomeSolid size="30" color={themeColors.bgLight} /> : <HomeOutline size="30" strokeWidth={2} color={themeColors.Purple} />
   } else if (route.name === 'aquarium') {
-    icon =  focused? <HeartSolid size="30" color={themeColors.bgLight} /> : <HeartOutline size="30" strokeWidth={2} color={themeColors.bgButton} />
+    icon =  focused? <HeartSolid size="30" color={themeColors.bgLight} /> : <HeartOutline size="30" strokeWidth={2} color={themeColors.Purple} />
   } else if(route.name==='search'){
-    icon =  focused? <MagnifyingGlassCircleSolid size="50" color={themeColors.bgLight} /> : <MagnifyingGlassOutline size="30" strokeWidth={2} color={themeColors.bgButton} />
+    icon =  focused? <MagnifyingGlassCircleSolid size="50" color={themeColors.bgLight} /> : <MagnifyingGlassOutline size="30" strokeWidth={2} color={themeColors.Purple} />
   } else if(route.name==='nille'){
-    icon =  focused? <ChatBubbleOvalLeftSolid size="30" color={themeColors.bgLight} /> : <ChatBubbleOvalLeftOutline size="30" strokeWidth={2} color={themeColors.bgButton} />
+    icon =  focused? <ChatBubbleOvalLeftSolid size="30" color={themeColors.bgLight} /> : <ChatBubbleOvalLeftOutline size="30" strokeWidth={2} color={themeColors.Purple} />
   } else if(route.name==='premium'){
-    icon =  focused? <GiftSolid size="30" color={themeColors.bgLight} /> : <GiftOutline size="30" strokeWidth={2} color={themeColors.bgButton} />
+    icon =  focused? <GiftSolid size="30" color={themeColors.bgLight} /> : <GiftOutline size="30" strokeWidth={2} color={themeColors.Purple} />
   } 
 
   
-  let buttonClass = focused? "bg-[#32918C]": "";
+  let buttonClass = focused? "bg-[#FF7461]": "";
   return (
     <View className={"flex items-center rounded-full p-3 shadow " + buttonClass}>
       {icon}
@@ -217,20 +220,26 @@ const menuIcons = (route, focused)=> {
 
 const DrawerNavigation = () => {
   return(
-    <Drawer.Navigator 
-      screenOptions={{ 
-        headerShown: false, 
-        contentStyle: {backgroundColor: themeColors.bgDark},
-        drawerStyle: {backgroundColor: themeColors.bgDark},
-        drawerActiveTintColor: themeColors.lightCol,
-        drawerInactiveTintColor: themeColors.bgLight,
-      }}
-    >
-      <Drawer.Screen name="Home" component={BottomTabNavigation} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
-      <Drawer.Screen name="Profile" component={ProfileScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
-      <Drawer.Screen name="Setting" component={SettingScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+    
+      <Drawer.Navigator 
+        screenOptions={{ 
+          headerShown: false, 
+          drawerStyle: {backgroundColor: themeColors.bgDark},
+          drawerActiveTintColor: themeColors.lightCol,
+          drawerInactiveTintColor: themeColors.bgLight,
+          
+          sceneContainerStyle: {
+            backgroundColor: themeColors.bgDark,
+          }
+          
+        }}
+      >
+        <Drawer.Screen name="Home" component={BottomTabNavigation} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+        <Drawer.Screen name="Profile" component={ProfileScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+        <Drawer.Screen name="Setting" component={SettingScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
 
-    </Drawer.Navigator>
+      </Drawer.Navigator>
+    
   );
 };
 

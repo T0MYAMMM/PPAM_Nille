@@ -8,6 +8,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
 import { firestoreDb } from '../firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { themeColors } from '../theme';
 
 const SignInScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
@@ -159,7 +160,7 @@ const SignInScreen = ({navigation}) => {
     container: {
         flex:1, 
         padding: 16,
-        backgroundColor:'#051630',
+        backgroundColor:themeColors.bgDark,
         alignItems:'center',
         justifyContent:'center',
     },
@@ -170,7 +171,7 @@ const SignInScreen = ({navigation}) => {
         maxHeight: 300,
     },
     errorText: {
-        color: '#fa5e2a',
+        color: themeColors.Red,
         marginHorizontal:40,
         textAlign: 'center',
         fontWeight:'bold',

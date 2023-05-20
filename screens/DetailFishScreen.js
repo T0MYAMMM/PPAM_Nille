@@ -96,20 +96,20 @@ const DetailFishScreen = ({ navigation, route }) => {
 
                         <View style={styles.content2}>
                             <View style={styles.cardContainer}>
-                                <View style={styles.card}>
-                                    <Ionicons name="thermometer-outline" size={32} color={themeColors.bgDark} />
+                                <View style={[styles.card, {backgroundColor: themeColors.Red} ]}>
+                                    <Ionicons name="thermometer-outline" size={32} color={themeColors.bgLight} />
                                     <Text style={styles.cardText}>Temperature: {fishData.temperature}</Text>
                                     <Text style={styles.cardText}>20°C</Text>
                                 </View>
 
-                                <View style={styles.card}>
-                                    <Ionicons name="water-outline" size={32} color={themeColors.bgDark} />
+                                <View style={[styles.card, {backgroundColor: themeColors.DarkBlue} ]}>
+                                    <Ionicons name="water-outline" size={32} color={themeColors.bgLight} />
                                     <Text style={styles.cardText}>pH Level: {fishData.pHLevel}</Text>
                                     <Text style={styles.cardText}>7.8</Text>
                                 </View>
 
-                                <View style={styles.card}>
-                                    <Ionicons name="alarm-outline" size={32} color={themeColors.bgDark} />
+                                <View style={[styles.card, {backgroundColor: themeColors.Blue} ]}>
+                                    <Ionicons name="alarm-outline" size={32} color={themeColors.bgLight} />
                                     <Text style={styles.cardText}>Schedule: {fishData.feedingSchedule}</Text>
                                     <Text style={styles.cardText}>08.00 | 20.00</Text>
                                     </View>
@@ -188,11 +188,7 @@ const DetailFishScreen = ({ navigation, route }) => {
 
                             <View style={styles.separator} />
                                     
-                            <Animated.Image
-                                style={styles.imageBiasa}
-                                source={{uri: fishData.imageUrl}}
-                                resizeMode="contain"
-                            />
+                            
                         </View>
                     </View>
                 ) : null}
@@ -214,8 +210,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: themeColors.bgDark,
         width: '100%',
-        paddingHorizontal: 20,
-        marginTop:20,
+        padding: 20,
+        marginVertical:20,
+        marginBottom: 70,
     },
     bannerContainer: {
         alignItems: 'center',
@@ -287,7 +284,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '30%',
         borderRadius: 10,
-        backgroundColor: themeColors.bgLight,
+        backgroundColor: themeColors.Pink,
         shadowColor: '#000000',
         shadowOffset: {
             width: 0,
@@ -301,7 +298,7 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 12,
         fontWeight: 'bold',
-        color: '#051630',
+        color: themeColors.bgLight,
     },
     shortcutContainer: {
         flex: 1,
@@ -347,10 +344,10 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     subSection: {
-        backgroundColor: themeColors.bgLight,
+        backgroundColor: themeColors.Green,
         borderRadius: 8,
-        padding: 16,
-        marginBottom: 10,
+        padding: 20,
+        marginBottom: 30,
     },
     sectionText: {
         fontSize: 16,
