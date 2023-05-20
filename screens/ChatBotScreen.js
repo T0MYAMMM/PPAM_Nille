@@ -70,18 +70,18 @@ const styles = StyleSheet.create({
   },
   chatContainer: {
     flex: 1,
-    width: '100%',
+    width: '90%',
     justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    padding: 16,
+    
   },
   chat: {
     flex: 1,
     backgroundColor: themeColors.LightGreen,
     borderRadius: 8,
-    paddingVertical: 8,
+    padding: 8,
     paddingHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 20,
     
   },
   chatContent: {
@@ -92,15 +92,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    marginVertical: 10,
   },
   userMessage: {
     alignSelf: 'flex-end',
     backgroundColor: themeColors.bgDark,
+    marginBottom: 10,
   },
   botMessage: {
     alignSelf: 'flex-start',
     backgroundColor: themeColors.DarkBlue,
+    marginBottom: 10,
   },
   messageText: {
     fontSize: 16,
