@@ -11,6 +11,7 @@ export const themeColors = {
    Pink: '#FBB7C4', 
    Purple: '#D6E1FF', 
    Red: '#FF7461',
+   Orange: '#F4C176',
 
    bgButton: '#32918C',
    bgButton2: '#4E8FF8',

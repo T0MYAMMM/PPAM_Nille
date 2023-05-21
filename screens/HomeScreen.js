@@ -1,13 +1,15 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../components/CustomButton';
 import { getAuth, signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
+
 import { themeColors } from '../theme';
 import CarouselToDo from '../components/carouselToDo';
-
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -45,7 +47,6 @@ const HomeScreen = () => {
             <CarouselToDo/>
           </View>
 
-
           <CustomButton
             text={"Logout"}
             width={'80%'}
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
       fontSize: 24,
-      fontWeight: 'bold',
+      fontFamily:'CeraProBold',
       textAlign: 'center', 
       color: themeColors.bgLight,
       paddingTop:20,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     subTitleText : {
       fontSize: 16, 
       color: themeColors.bgLight, 
-      fontWeight: 'normal', 
+      fontFamily:'CeraProLight',
       textAlign:'center', 
       paddingTop:10, 
       paddingBottom:20,

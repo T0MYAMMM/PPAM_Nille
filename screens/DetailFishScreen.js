@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 10,
         width: '30%',
-        borderRadius: 10,
+        borderRadius: 20,
         backgroundColor: themeColors.Pink,
         shadowColor: '#000000',
         shadowOffset: {
@@ -299,9 +299,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        shadowOpacity: 0.2,
+        elevation: 2,
     },
     shortcutText: {
         fontSize: 14,
@@ -327,7 +326,7 @@ const styles = StyleSheet.create({
     },
     subSection: {
         backgroundColor: themeColors.Green,
-        borderRadius: 8,
+        borderRadius: 20,
         padding: 20,
         marginBottom: 30,
     },

@@ -39,7 +39,7 @@ const PremiumScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
-      <Text style={styles.titleText}>Uploaded images</Text>
+      <Text style={styles.titleText}>Nille Premium</Text>
 
       <Text style={styles.subTitleText}> 
         Jika ingin menambahkan data card, silakan upload gambar dengan menekan tombol di bawah 

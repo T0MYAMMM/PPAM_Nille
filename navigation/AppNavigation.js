@@ -125,6 +125,12 @@ const StackNavigator = () => {
           contentStyle: {backgroundColor: themeColors.bgDark}}}
       >
         
+        <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
+        <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
+        <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
+        <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}></Stack.Screen>
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}></Stack.Screen>        
+        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}></Stack.Screen>
         <Stack.Screen name="Main" component={DrawerNavigation} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}/>
         <Stack.Screen name="ProfileSetting" component={ProfileSettingScreen} screenOptions={{contentStyle: {backgroundColor: themeColors.bgDark}}}></Stack.Screen>
 
@@ -174,7 +180,7 @@ const StackNavigator = () => {
               <CustomHeader 
                 title1="Aquarium" 
                 title2="Detail" 
-                
+                onBackPress={true}
               />
             ),
           }}
@@ -284,9 +290,45 @@ const DrawerNavigation = () => {
           
         }}
       >
-        <Drawer.Screen name="Home" component={BottomTabNavigation} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
-        <Drawer.Screen name="Profile" component={ProfileScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
-        <Drawer.Screen name="Setting" component={SettingScreen} options={{drawerStyle: {backgroundColor:themeColors.bgDark}}}/>
+        <Drawer.Screen 
+          name="Home" 
+          component={BottomTabNavigation} 
+          options={{
+            drawerStyle: {backgroundColor:themeColors.bgDark}
+            
+          }}
+        />
+        
+        <Drawer.Screen name="Profile" 
+          component={ProfileScreen} 
+          options={{
+            drawerStyle: {backgroundColor:themeColors.bgDark},
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Hi Tom" 
+                title2="Welcome back!" 
+                onBackPress={true}
+              />
+            ),
+          }}
+        />
+
+        <Drawer.Screen 
+          name="Setting" 
+          component={SettingScreen} 
+          options={{
+            drawerStyle: {backgroundColor:themeColors.bgDark},
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Aquarium" 
+                title2="Detail" 
+                onBackPress={true}
+              />
+            ),
+        }}
+      />
 
       </Drawer.Navigator>
     

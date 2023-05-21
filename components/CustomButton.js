@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
 
     container_LIGHT: {
-        backgroundColor: themeColors.bgLight,
+        backgroundColor: themeColors.Red,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
 
     container_DARK: {
-        backgroundColor: themeColors.bgDark,
+        backgroundColor: themeColors.Red,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -100,11 +100,11 @@ const styles = StyleSheet.create({
     },
 
     text_DARK: {
-        color: 'white',
+        color: themeColors.bgLight,
         fontSize: 16,
     },
     text_LIGHT: {
-        color: '#051630',
+        color: themeColors.bgLight,
         fontSize: 16,
     },
 

@@ -47,7 +47,6 @@ const ScreenHeader = ({ menu, onMenuPress, back, title1, title2, opennotif, navi
 
 const styles = StyleSheet.create({
     header: {
-        height: 80,
         elevation:4,
         justifyContent: 'center',
         alignItems: 'center',
@@ -72,22 +71,23 @@ const styles = StyleSheet.create({
         marginBottom:-5,
         textAlign:'left',
         fontSize: 15, 
-        color: 'white',
+        fontFamily:'CeraProMedium',
+        color: themeColors.bgLight,
     },
     titleText2: 
     {
         marginTop:-5,
         textAlign:'left',
-        fontWeight:'bold', 
         fontSize: 17, 
-        color: 'white',
+        fontFamily:'CeraProBold',
+        color: themeColors.bgLight,
     },
     button: {
         alignItems: 'center',
         justifyContent:'center',
         width:50,
         height:50,
-        backgroundColor: themeColors.DarkBlue,
+        backgroundColor: themeColors.Green,
         borderRadius:15,
     },
     

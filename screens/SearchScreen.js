@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton.js';
 import { MagnifyingGlassIcon as MagnifyingGlassSolid } from 'react-native-heroicons/solid';
 import { themeColors } from '../theme';
 import FishCard from '../components/FishCard.js';
+import { color } from 'react-native-reanimated';
 
 const SearchScreen = ({ navigation }) => {
     const [allData, setAllData] = useState([]);
@@ -32,6 +33,13 @@ const SearchScreen = ({ navigation }) => {
       setTodoData(filteredResult);
     };
 
+    const onFilterPressed = () => {
+      const filteredResult = allData.filter((item) =>
+        item.nama_populer.toLowerCase().includes(query.toLowerCase())
+      );
+      setTodoData(filteredResult);
+    };
+
     const renderSearchResult = ({ item }) => {
     
       return (
@@ -50,29 +58,34 @@ const SearchScreen = ({ navigation }) => {
     return (
       <View style={styles.container}> 
         <View style={styles.content}>
-          <View style={styles.searchBar}>
-            <MagnifyingGlassSolid size={30} color={themeColors.bgButton3} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search here"
-              value={query}
-              onChangeText={setQuery}
-              onSubmitEditing={onSearchPressed} // Menambahkan onSubmitEditing untuk mengeksekusi fungsi search saat tombol "Enter" ditekan
-              returnKeyType="search" // Mengubah text pada tombol "Return" menjadi "Search"
-            />
-          </View>
-          <CustomButton  
-            onPress={onSearchPressed}
-            text='Search'
-            type='LIGHT'
-            bgColor={themeColors.Red}
-            color={themeColors.bgLight}
-            width='90%'
-            height={50}
-            padding={12}
-            marginVertical={10}
-          />  
+          <View style={styles.searchcontent}> 
+            <View style={styles.searchBar}>
+              <MagnifyingGlassSolid size={20} color={themeColors.Red} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search here"
+                placeholderStyle={styles.placeholderText}
+                value={query}
+                onChangeText={setQuery}
+                onSubmitEditing={onSearchPressed} // Menambahkan onSubmitEditing untuk mengeksekusi fungsi search saat tombol "Enter" ditekan
+                returnKeyType="search" // Mengubah text pada tombol "Return" menjadi "Search"
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={onFilterPressed} >
+                <Image 
+                  size={22} 
+                  source={require('../assets/icons/filter.png')}/>
+            </TouchableOpacity>
+          </View> 
+
         </View> 
+
+        <View style={styles.categorycontainer}>
+          <Text style={styles.categoryTitle2}>Freshwater</Text>
+          <Text style={styles.categoryTitle}>Ornamental</Text>
+          <Text style={styles.categoryTitle2}>Predator</Text>
+        </View>
+
         <View style={styles.content2}>
           {todoData.length > 0 ? (
             <FlatList
@@ -109,14 +122,18 @@ const styles = StyleSheet.create({
     width:'100%',
     alignItems:'center',
   },
+  searchcontent:{
+    flexDirection: 'row',
+    marginTop: 10,
+  },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: themeColors.bgLight,
     borderRadius: 75,
     paddingHorizontal: 10,
-    width: '90%',
-    height: 50,
+    width: '70%',
+    height: 40,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -125,8 +142,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 100,
     elevation: 5,
-    marginTop: 15,
-
   },
   searchInput: {
     marginLeft: 8,
@@ -135,15 +150,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
   },
+  button: {
+    alignItems: 'center',
+    justifyContent:'center',
+    width:40,
+    height:40,
+    backgroundColor: themeColors.Pink,
+    borderRadius:15,
+    marginLeft:10,
+  },
+  placeholderText: {
+    fontFamily: 'CeraProLight',
+    color: 'red',
+  },
+  categorycontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  categoryTitle: {
+    fontSize: 17,
+    fontFamily: 'CeraProBold',
+    color: themeColors.bgLight,
+    marginHorizontal:20,
+  },
+  categoryTitle2: {
+    fontSize: 14,
+    fontFamily: 'CeraProLight',
+    color: themeColors.bgLight,
+  },
   resultContainer: {
     flex: 1,
     contentContainerStyle:{alignItems:'center'},
-
     width:"100%",
-    
     paddingHorizontal:20,
     marginVertical: 15,
-    
   },
   card: {
     flexDirection: 'row',
