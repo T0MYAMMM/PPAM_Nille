@@ -1,0 +1,41 @@
+[
+    {
+        "id" : "0",
+        "name" : "aqoea",
+        "size" : "large",
+        "water" : "fresh",
+        "plants" : "true",
+        "oxygen" : "high",   
+        "fish" : {
+            "id_spesies" : "aa01",
+            "name" : "ikan koi",
+            "size" : "mediium",
+            "water" : "fresh"
+        },
+        "reminder" : {
+            "times" : "1",
+            "time" : ["2023-05-22T12:24:38.868Z"],
+            "food" : "pelet"
+        } 
+    },
+    {
+        "id" : "1",
+        "name" : "aqoea2",
+        "size" : "medium",
+        "water" : "salt",
+        "plants" : "true",
+        "oxygen" : "medium",   
+        "fish" : {
+            "id_spesies" : "aa02",
+            "name" : "ikan kerapu",
+            "size" : "small",
+            "water" : "salt"
+        },
+        "reminder" : {
+            "times" : "2",
+            "time" : ["2023-05-22T12:24:38.868Z", "2023-05-22T08:24:38.868Z"],
+            "food" : "pelet"
+        },
+        "username":"thomaassm" 
+    }
+]

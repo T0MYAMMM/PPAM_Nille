@@ -73,7 +73,7 @@ const DetailFishScreen = ({ navigation, route }) => {
                                     )}
                                 </View>
 
-                            </View>
+                            </View> 
                         </View>
 
                         <View style={styles.content2}>

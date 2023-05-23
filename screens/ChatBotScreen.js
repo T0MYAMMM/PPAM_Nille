@@ -5,7 +5,7 @@ import { themeColors } from '../theme';
 
 const ChatBotScreen = () => {
   const [data, setData] = useState([]);
-  const apiKey = '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';
+  const apiKey = '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';
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
   const [textInput, setTextInput] = useState('');
 

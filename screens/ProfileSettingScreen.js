@@ -1,11 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, {useEffect, useContext, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ImageBackground,
+  TextInput,
+  StyleSheet,
+  Alert,
+} from 'react-native';
+
+import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+
 import { themeColors } from '../theme';
 
 const ProfileSettingScreen = () => {
+    const {user, logout} = useContext(AuthContext);
+    const [image, setImage] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [transferred, setTransferred] = useState(0);
+    const [userData, setUserData] = useState(null);
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
+
+    const getUser = async() => {
+        const currentUser = await firestore()
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .then((documentSnapshot) => {
+          if( documentSnapshot.exists ) {
+            console.log('User Data', documentSnapshot.data());
+            setUserData(documentSnapshot.data());
+          }
+        })
+    }
+
+    const handleUpdate = async() => {
+        let imgUrl = await uploadImage();
+    
+        if( imgUrl == null && userData.userImg ) {
+          imgUrl = userData.userImg;
+        }
+    
+        firestore()
+        .collection('users')
+        .doc(user.uid)
+        .update({
+          fname: userData.fname,
+          lname: userData.lname,
+          about: userData.about,
+          phone: userData.phone,
+          country: userData.country,
+          city: userData.city,
+          userImg: imgUrl,
+        })
+        .then(() => {
+          console.log('User Updated!');
+          Alert.alert(
+            'Profile Updated!',
+            'Your profile has been updated successfully.'
+          );
+        })
+    }
 
     const fetchUserData = async () => {
         const userDocument = await firestore().collection('users').doc('userId').get();

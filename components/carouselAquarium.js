@@ -4,21 +4,16 @@ import { themeColors } from '../theme';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebaseConfig';
+
+import CustomButton from './CustomButton';
+
 const { width } = Dimensions.get('window');
 const cardWidth = 0.8*width
 
-const AquariumList = [
-  {
-    id: '1',
-    speciesId: 'species1',
-    size: 'small',
-    cleaningSchedule: 'weekly',
-    filterType: 'external',
-  },
-  // tambahkan sebanyak yang dibutuhkan
-];
-
 const carouselAquarium = () => {
+    const [aquariumData, setAquariumData] = useState([]);
     const navigation = useNavigation();
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,10 +24,28 @@ const carouselAquarium = () => {
     const id_spesies = "aa01";
 
     useEffect(() => {
-      if (flatlistRef.current) {
-          flatlistRef.current.scrollToIndex({ index: todayIndex, animated: true });
-      }
+      // Mendapatkan referensi ke folder 'aquariums' dalam Realtime Database
+      const dbRef = ref(db, 'aquariums');
+    
+      // Mengambil data aquarium dari Realtime Database
+      onValue(dbRef, (snapshot) => {
+        if (snapshot.exists()) {
+          // Mendapatkan nilai data dari snapshot
+          const data = snapshot.val();
+    
+          // Mengubah data menjadi array
+          const aquariumArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key]
+          }));
+    
+          // Mengatur data aquarium ke state
+          setAquariumData(aquariumArray);
+        }
+      });
     }, []);
+
+    const AquariumList = aquariumData;
 
     const onScrollToIndexFailed = (info) => {
       const wait = new Promise(resolve => setTimeout(resolve, 500));
@@ -72,11 +85,10 @@ const carouselAquarium = () => {
             return (
               <TouchableOpacity onPress={onCardPress}>
                 <Animated.View style={{...styles.box, opacity}}>
-                  <Text style={styles.title}>Aquarium {item.id}</Text>
-                  <Text style={styles.detail}>Species ID: {item.speciesId}</Text>
+                  <Text style={styles.title}>Aquarium {index + 1}</Text>
+                  <Text style={styles.detail}>Species: {item.fish.name}</Text>
                   <Text style={styles.detail}>Size: {item.size}</Text>
-                  <Text style={styles.detail}>Cleaning Schedule: {item.cleaningSchedule}</Text>
-                  <Text style={styles.detail}>Filter Type: {item.filterType}</Text>
+                  <Text style={styles.detail}>Reminder: {item.reminder.time}</Text>
                 </Animated.View>
               </TouchableOpacity>
             );
@@ -94,8 +106,9 @@ const carouselAquarium = () => {
           onScrollToIndexFailed={onScrollToIndexFailed}
           ListFooterComponent={() => (
             <View style={{ width: cardWidth, justifyContent: 'center', alignItems: 'center', margin: 20 }}>
-              <Button 
-                title="Tambah Aquarium"
+              <CustomButton 
+                text="Tambah Aquarium"
+                type='LIGHT'
                 onPress={() => navigation.navigate('AddAquariumScreen')}
               />
             </View>

@@ -12,11 +12,4 @@ export const themeColors = {
    Purple: '#D6E1FF', 
    Red: '#FF7461',
    Orange: '#F4C176',
-
-   bgButton: '#32918C',
-   bgButton2: '#4E8FF8',
-   bgButton3: '#29496F',
-   lightCol: '#FFF7D6',
-   text: '#3C2A21'
-   
 }   

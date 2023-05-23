@@ -30,6 +30,10 @@ import UploadImageScreen from '../screens/UploadImageScreen';
 import DetailFishScreen from '../screens/DetailFishScreen';
 import AddAquariumScreen from '../screens/AddAquariumScreen';
 import AquariumDetailScreen from '../screens/AquariumDetailScreen';
+import ChooseAquarium from '../screens/ChooseAquarium';
+import AquariumSelectionStep from '../screens/AquariumSelectionStep';
+import FishSelectionStep from '../screens/FishSelectionStep';
+import ReminderSettingStep from '../screens/ReminderSettingStep';
 // - Bottom Tab
 import HomeScreen from '../screens/HomeScreen';
 import MyAquariumScreen from '../screens/MyAquariumScreen';
@@ -39,8 +43,10 @@ import ChatBotScreen from '../screens/ChatBotScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingScreen from '../screens/SettingScreen';
 import ProfileSettingScreen from '../screens/ProfileSettingScreen';
+
 // - Header
 import ScreenHeader from '../components/ScreenHeader';
+import CustomDrawer from '../components/CustomDrawer';
 // - Passing data and update
 import ImageUploadContext from '../screens/ImageUploadContext';
 
@@ -87,7 +93,7 @@ const CustomHeader = ({ title1, title2, onBackPress }) => {
   }
 };
 
-//Stack Navigation
+//Stack Navigationa
 const StackNavigator = () => {
   const [fishData, setFishData] = useState([]);
   useEffect(() => {
@@ -124,7 +130,6 @@ const StackNavigator = () => {
           headerShown: false,
           contentStyle: {backgroundColor: themeColors.bgDark}}}
       >
-        
         <Stack.Screen name="GetStarted" component={GetStartedScreen}></Stack.Screen>
         <Stack.Screen name="SignIn" component={SignInScreen}></Stack.Screen>
         <Stack.Screen name="SignUp" component={SignUpScreen}></Stack.Screen>
@@ -166,6 +171,7 @@ const StackNavigator = () => {
               <CustomHeader 
                 title1="add new" 
                 title2="Aquarium!" 
+                onBackPress={true}
               />
             ),
           }}
@@ -174,6 +180,51 @@ const StackNavigator = () => {
         <Stack.Screen
           name="AquariumDetailScreen"
           component={AquariumDetailScreen}
+          options={{
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Aquarium" 
+                title2="Detail" 
+                onBackPress={true}
+              />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="AquariumSelectionStep"
+          component={AquariumSelectionStep}
+          options={{
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Aquarium" 
+                title2="Detail" 
+                onBackPress={true}
+              />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="FishSelectionStep"
+          component={FishSelectionStep}
+          options={{
+            headerShown: true,
+            header: () => (
+              <CustomHeader 
+                title1="Aquarium" 
+                title2="Detail" 
+                onBackPress={true}
+              />
+            ),
+          }}
+        />
+
+        <Stack.Screen
+          name="ReminderSettingStep"
+          component={ReminderSettingStep}
           options={{
             headerShown: true,
             header: () => (
@@ -278,12 +329,20 @@ const DrawerNavigation = () => {
   return(
     
       <Drawer.Navigator 
+        drawerContent={props => <CustomDrawer {...props} />}
         screenOptions={{ 
-          headerShown: false, 
-          drawerStyle: {backgroundColor: themeColors.bgDark},
-          drawerActiveTintColor: themeColors.lightCol,
-          drawerInactiveTintColor: themeColors.bgLight,
-          
+          headerShown: false,
+          drawerActiveBackgroundColor: themeColors.LightBlue,
+          drawerActiveTintColor: themeColors.bgLight,
+          drawerInactiveTintColor: themeColors.Pink,
+          drawerLabelStyle: {
+          marginLeft: 20,
+          fontFamily: 'CeraProMedium',
+          fontSize: 15,
+        },
+          drawerStyle: {
+            backgroundColor: themeColors.bgDark,
+          },
           sceneContainerStyle: {
             backgroundColor: themeColors.bgDark,
           }

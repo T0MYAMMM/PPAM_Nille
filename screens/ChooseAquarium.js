@@ -1,43 +1,29 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
 import { themeColors } from '../theme';
 import { theme } from 'native-base';
 import CarouselAquarium from '../components/carouselAquarium';
-import { useRoute } from '@react-navigation/native';
 
-const MyAquariumScreen = () => {
-    const route = useRoute();
-    const formData = route.params?.formData || {};
-
+const ChooseAquarium = () => {
     const navigation = useNavigation();
     const onLogoutPressed = () => {
       console.warn("Sabar ya fiturnya lagi di develop");
     };
 
-
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text
                 onPress={() => navigation.navigate('Home')}
-                style={styles.titleText}>Add your fish sites</Text>
+                style={styles.titleText}>Pilih Aquarium</Text>
             <Text style={styles.subTitleText}>This is where your growing sites will be listed. You can add sites by tapping the button below.</Text>
             
             <View style={styles.carouselContainer}>
               <CarouselAquarium/>
             </View>
-
-            <CustomButton
-                text = 'Tombol'
-                onPress={onLogoutPressed} 
-                type='LIGHT'
-                width='50%'
-                height={50}
-                padding={12}
-                marginVertical={15}
-            />
+            
         </ScrollView>
     );
 }
@@ -71,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyAquariumScreen;
+export default ChooseAquarium;
