@@ -1,194 +1,264 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Animated, Dimensions } from 'react-native';
-import { themeColors } from '../theme';
-import moment from 'moment';
-import Paginator from './paginator';
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, FlatList, StyleSheet, useWindowDimensions, Alert, TouchableOpacity, Modal, Button } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
+import Carousel from "react-native-snap-carousel";
+import { themeColors } from "../theme";
+import Checkbox from 'expo-checkbox';
 
-const { width } = Dimensions.get('window');
-const cardWidth = 0.8*width
+import { ref, onValue } from 'firebase/database';
+import { db, auth, firestoreDb } from '../firebaseConfig';
+
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const CarouselToDo = () => {
+    const [todos, setTodos] = useState([
+        {
+            day: "Monday",
+            tasks: [
+                ["Pekerjaan 1", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Tuesday",
+            tasks: [
+                ["Pekerjaan 1", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Wednesday",
+            tasks: [
+                ["Pekerjaan 1", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Thursday",
+            tasks: [
+                ["Pekerjaan 1", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Friday",
+            tasks: [
+                ["Pekerjaan 1", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Saturday",
+            tasks: [
+                ["Feed Aquarium A", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+        {
+            day: "Sunday",
+            tasks: [
+                ["Feed Aquarium A", "08.00"], 
+                ["Pekerjaan 2", "12.00"], 
+                ["Pekerjaan 3", "16.00"],
+            ],
+        },
+      ]);
 
 
-const TaskList = [
-  {
-      id: '1',
-      date: new Date(), // date hari ini
-      tasks: [
-        {
-          time: '06.00',
-          task: 'Feed aquarium a',
-        },
-        {
-          time: '12.00',
-          task: 'Feed aquarium b',
-        },
-      ],
-  },
-  {
-      id: '2',
-      date: new Date(Date.now() - 86400000), // date kemarin
-      tasks: [
-        {
-          time: '12.00',
-          task: 'Feed aquarium c',
-        },
-        {
-          time: '18.00',
-          task: 'Feed aquarium d',
-        },
-      ],
-  },
-  {
-      id: '3',
-      date: new Date(Date.now() + 86400000), // date besok
-      tasks: [
-        {
-          time: '18.00',
-          task: 'Feed aquarium e',
-        },
-        {
-          time: '24.00',
-          task: 'Feed aquarium f',
-        },
-      ],
-  },
-];
-
-// Fungsi untuk membandingkan date, jika date sama return 'Hari ini', jika date kemarin return 'Kemarin', jika date besok return 'Besok'
-const getDateLabel = (date) => {
-  const today = moment();
-  const taskDate = moment(date);
+    const [selectedDayIndex, setSelectedDayIndex] = useState(new Date().getDay());
+    const [isChecked, setChecked] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [newTask, setNewTask] = useState('');
+    const [newTime, setNewTime] = useState('');
+    const [currentDayIndex, setCurrentDayIndex] = useState(0);
+    const windowWidth = useWindowDimensions().width;
   
-  if (taskDate.isSame(today, 'day')) {
-    return 'Hari Ini';
-  } else if (taskDate.isSame(moment().subtract(1, 'days'), 'day')) {
-    return 'Kemarin';
-  } else if (taskDate.isSame(moment().add(1, 'days'), 'day')) {
-    return 'Besok';
-  } else {
-    return taskDate.format('DD MMM YYYY'); // Jika tidak termasuk hari ini, kemarin, atau besok, format date menjadi 'DD MMM YYYY'
-  }
-}
+    // Membuat addTask menjadi fungsi asynchronous
+    const addTask = async (index) => {
+        await setCurrentDayIndex(index % todos.length); // Menunggu hingga setCurrentDayIndex selesai
+        setModalVisible(true);
+    };
 
-const carouselToDo = () => {
-    const scrollX = useRef(new Animated.Value(0)).current;
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const flatlistRef = useRef(null);
-    const tasksSortedByDate = [...TaskList].sort((a, b) => a.date - b.date);
-    const todayIndex = tasksSortedByDate.findIndex(task => getDateLabel(task.date) === 'Hari Ini');
-
+    handleAddTask = () => {
+        if(newTask !== '' && newTime !== ''){
+            const newTasks = [...todos];
+            if (newTasks[(currentDayIndex+4) % 7]) {
+                newTasks[(currentDayIndex+4) % 7].tasks.push([newTask, newTime]);
+                setTodos(newTasks);
+            } else {
+                console.error(`Invalid index: ${currentDayIndex}`);
+            }
+        }
+        setModalVisible(false);
+        // Menambahkan ini untuk mereset field input setelah tugas ditambahkan
+        setNewTask('');
+        setNewTime('');
+    };
+  
     useEffect(() => {
-      if (flatlistRef.current) {
-          flatlistRef.current.scrollToIndex({ index: todayIndex, animated: true });
-      }
+        setSelectedDayIndex((new Date().getDay() + 6) % 7);  // update index to start from "Minggu" not "Senin"
     }, []);
-
-    const onScrollToIndexFailed = (info) => {
-      const wait = new Promise(resolve => setTimeout(resolve, 500));
-      wait.then(() => {
-          flatlistRef.current?.scrollToIndex({ index: info.index, animated: true });
-      });
-    }
-
-    const viewableItemsChanged = useRef(({ viewableItems }) => {
-      setCurrentIndex(viewableItems[0].index)
-    }).current;
-
-    const viewConfig = useRef({ viewAreaCoveragePercentThreshold:  50 }).current;
+  
+    const renderItem = ({ item, index }) => {
+      return (
+        <View style={styles.card}>
+          <Text style={styles.dayText}>{item.day}</Text>
+          <FlatList
+            data={item.tasks}
+            keyExtractor={(item, index) => `${item}-${index}`}
+            renderItem={({ item, index }) => (
+              <Task item={item} index={index} />
+            )}
+          />
+          <TouchableOpacity onPress={() => addTask(index)}>
+            <AntDesign name="pluscircle" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      );
+    };
+  
   
     return (
       <View style={styles.container}>
-        <FlatList 
-          data={tasksSortedByDate}
-          renderItem={({ item, index }) => {
-            const inputRange = [
-              (index - 1) * width,
-              index * width,
-              (index + 1) * width
-            ];
-  
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [0.5, 1, 0.3]
-            });
-  
-            return (
-              <Animated.View style={{...styles.box, opacity}}>
-                <Text style={styles.dateTitle}>{getDateLabel(item.date)}</Text>
-                <FlatList
-                  data={item.tasks}
-                  keyExtractor={(task, taskIndex) => `${item.id}-task-${taskIndex}`}
-                  renderItem={({ item: task }) => (
-                    <View style={styles.taskContainer}>
-                      <Text style={styles.time}>{task.time}</Text>
-                      <Text style={styles.task}>{task.task}</Text>
-                    </View>
-                  )}
-                  style={{flex: 1}}
-                />
-              </Animated.View>
-            );
-          }}
-          keyExtractor={item => item.id}
-          bounces={false}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: false })}
-          scrollEventThrottle={32}
-          onViewableItemsChanged={viewableItemsChanged}
-          viewabilityConfig={viewConfig} 
-          ref={flatlistRef}
-          onScrollToIndexFailed={onScrollToIndexFailed}
-        />
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+                setModalVisible(!modalVisible);
+            }}
+        >
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Tambah Task</Text>
+                    <TextInput
+                        style={styles.modalInput}
+                        onChangeText={setNewTask}
+                        value={newTask}
+                        placeholder="Nama task"
+                    />
+                    <TextInput
+                        style={styles.modalInput}
+                        onChangeText={setNewTime}
+                        value={newTime}
+                        placeholder="Waktu"
+                    />
+                    <Button title="Tambah" onPress={handleAddTask} />
+                </View>
+            </View>
+        </Modal>
 
-        <Paginator data={TaskList} scrollX={scrollX}/>
+        <Carousel
+          containerCustomStyle={{overflow: 'visible'}}
+          data={todos}
+          renderItem={renderItem}
+  
+          itemWidth={260}
+          sliderWidth={windowWidth}
+          slideStyle={{display: 'flex', alignItems: 'center'}}
+          
+          firstItem={selectedDayIndex}
+          loop={true}
+          inactiveSlideScale={0.77}
+          inactiveSlideOpacity={0.5}
+        />
       </View>
     );
-  };
+  }
   
-  const styles = StyleSheet.create({
+  const Task = ({ item, index }) => {
+    const [isChecked, setChecked] = useState(false);
+  
+    return (
+      <View style={styles.taskContainer}>
+          <Checkbox
+              style={styles.checkbox}
+              value={isChecked}
+              onValueChange={setChecked}
+              color={isChecked ? themeColors.Red : undefined}
+          />
+          <Text style={styles.taskText}>{item[0]}</Text>
+          <Text style={styles.timeText}>{item[1]}</Text>
+      </View>
+    );
+  }
+
+const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',        
-      alignItems: 'center',
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: themeColors.bgDark,
+    },
+    card: {
+        padding: 20,
+        backgroundColor: themeColors.LightGreen,
+        borderRadius: 20,
+        margin: 10,
+    },
+    dayText: {
+        fontSize: 24,
+        fontFamily:'CeraProBold',
+        color: themeColors.bgDark,
+        marginBottom: 20,
     },
     taskContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 10,
     },
-    box: {
-      flex:1,
-      height:200,
-      width: cardWidth,
-      margin: 20,
-      borderRadius: 20,
-      backgroundColor: themeColors.Blue,
-      alignItems:'center',
-      justifyContent:'center',
-      padding:20,
+    taskText: {
+        fontSize: 16,
+        fontFamily: 'CeraProMedium',
+        color: themeColors.bgDark,
     },
-    dateTitle: {
-      fontSize:24,
-      fontWeight: '800',
-      marginBottom:10,
-      color: themeColors.bgLight,
-      textAlign: 'center',
+    timeText: {
+        fontSize: 16,
+        fontFamily: 'CeraProMedium',
+        color: themeColors.bgDark,
+        marginLeft:10,
     },
-    time: {
-      fontSize:20,
-      fontWeight: '800',
-      marginRight: 10,
-      color: themeColors.bgLight,
-      textAlign: 'center'
+    checkbox: {
+        margin: 8,
+     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
     },
-    task: {
-      fontSize:17,
-      color: themeColors.bgLight,
-      textAlign: 'center'
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
     },
-  });
-  
-  export default carouselToDo;
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    modalInput: {
+        height: 40,
+        width: 200,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+});
+
+export default CarouselToDo;

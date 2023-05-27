@@ -2,14 +2,18 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../components/CustomButton';
+
+import { auth } from '../firebaseConfig';
 import { getAuth, signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import CarouselToDo from '../components/carouselToDo';
+import CarouselToDo2 from '../components/CarouselToDo2';
 
 import { useFonts } from 'expo-font';
 import * as Font from 'expo-font';
 
 import { themeColors } from '../theme';
-import CarouselToDo from '../components/carouselToDo';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -18,7 +22,7 @@ const HomeScreen = () => {
     const handleLogout = async () => {
       try {
         // Hapus token autentikasi dari penyimpanan lokal (AsyncStorage)
-        const auth = getAuth();
+        //const auth = getAuth();
         await signOut(auth);
         await AsyncStorage.removeItem('authToken');
         // Menghapus currentUser atau menetapkannya sebagai null
@@ -44,18 +48,27 @@ const HomeScreen = () => {
           <Text style={styles.subTitleText}> Disini ada upcoming to do </Text>
 
           <View style={styles.carouselContainer}>
-            <CarouselToDo/>
+            <CarouselToDo2/>
           </View>
 
-          <CustomButton
-            text={"Logout"}
-            width={'80%'}
-            type='LIGHT'
-            padding={12}
-            height={50}
-            onPress={onLogoutPressed}
-          />
         </View>     
+
+
+        <View style={{ alignItems:'center', marginTop:40, }}>
+
+          <TouchableOpacity style={styles.premiumCard}>
+            <Image
+              source={require("../assets/images/nille_logo.png")}
+              style={styles.image}
+              resizeMode='contain'
+            />
+
+            <Text style={styles.promoTitle}>Nille Premium</Text>
+
+            <Text style={styles.promoText}>Subscribe to use our complete features!</Text>
+          </TouchableOpacity>
+          
+        </View>
       </ScrollView>
   );
 };
@@ -69,6 +82,12 @@ const styles = StyleSheet.create({
     content: {
       alignItems:'center',
       justifyContent:'center',
+    },
+    image: {
+      top: -56,
+      position: 'absolute',
+      width:'80%',
+      height:130,
     },
     titleText: {
       fontSize: 24,
@@ -86,8 +105,34 @@ const styles = StyleSheet.create({
       paddingBottom:20,
     },
     carouselContainer: {
-      height: 240, // adjust this value as needed
-      marginBottom: 20, // adjust this value as needed
+      height: 400, // adjust this value as needed
+      marginBottom: 80, // adjust this value as needed
+    },
+    premiumCard: {
+      flex:1,
+      width:'90%',
+      height:200,
+      backgroundColor: themeColors.Green,
+      alignItems:'center',
+      borderRadius:20,
+    },
+    promoTitle: {
+      marginTop:65,
+      fontSize: 24,
+      fontFamily:'CeraProBold',
+      textAlign: 'center', 
+      color: themeColors.bgDark,
+      paddingTop:20,
+    },
+    promoText: {
+      fontSize: 16, 
+      color: themeColors.bgDark, 
+      fontFamily:'CeraProMedium',
+      lineHeight:20,
+      textAlign:'center', 
+      paddingTop:10, 
+      paddingBottom:20,
+      marginHorizontal:20,
     },
 });
 

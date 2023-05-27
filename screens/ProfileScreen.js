@@ -4,26 +4,91 @@ import { themeColors } from '../theme';
 import CustomButton from '../components/CustomButton';
 import * as ImagePicker from 'expo-image-picker';
 
-import CarouselToDo from '../components/carouselToDo';
+import { auth, firestoreDb } from '../firebaseConfig';
+import { signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebaseConfig"; // import Firebase storage
+import { updateDoc } from "firebase/firestore";
+import { onSnapshot } from 'firebase/firestore';
+//import CarouselToDo from '../components/carouselToDo';
 
-const { width, height } = Dimensions.get('window');
-const cardWidth = 0.8 * width;
-const cardHeight = 0.6 * height;
 
 const ProfileScreen = ({ navigation }) => {
+    const [user, setUser] = useState(null);
+    const [profilePicture, setProfilePicture] = useState('');
+
+    const handleLogout = async () => {
+        try {
+          // Hapus token autentikasi dari penyimpanan lokal (AsyncStorage)
+          await signOut(auth);
+          await AsyncStorage.removeItem('authToken');
+          // Menghapus currentUser atau menetapkannya sebagai null
+          //auth.currentUser = null;
+    
+          // Navigasi ke halaman login
+          navigation.navigate('SignIn');
+        } catch (error) {
+          console.log('Error logging out:', error);
+        }
+      };
+    
+    const onLogoutPressed = () => {
+        console.log("Logout dulu")
+        handleLogout();
+    }
+      
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                const userDocRef = doc(firestoreDb, 'users', auth.currentUser.uid);
+                onSnapshot(userDocRef, (doc) => {
+                    setUser(doc.data());
+                });
+                } catch (error) {
+                console.log(error);
+                }
+            } else {
+                setUser(null);
+            }
+        });
+      
+        return () => unsubscribe();
+    }, []);
 
     const onEditProfilePicture = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
         });
-      
-        console.log(result);
-      
-        if (!result.cancelled) {
-          setProfilePicture(result.uri);
+    
+        if (!result.canceled) {
+            // Mengambil URI gambar dari array assets, bukan dari properti uri langsung
+            let uri = result.assets[0].uri;
+            //console.log(uri);
+            setProfilePicture(uri);
+    
+            if (uri) {
+                console.log(uri)
+                let imageName = auth.currentUser.uid + '_' + Date.now() + '_' + uri.split("/").pop();
+                let imageRef = ref(storage, "profilePictures/" + imageName);
+                let response = await fetch(uri);
+                let blob = await response.blob();
+                await uploadBytes(imageRef, blob);
+                console.log("kontolll")
+                // get the download URL and update the user's avatar in Firestore
+                let downloadURL = await getDownloadURL(imageRef);
+                console.log(downloadURL)
+                let userDocRef = doc(firestoreDb, "users", auth.currentUser.uid);
+                console.log(userDocRef)
+                await updateDoc(userDocRef, {
+                    avatar: downloadURL,
+                });
+            }
         }
     };
 
@@ -32,7 +97,7 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const onSettingPressed = () => {
-        console.warn("mau buka setting?")
+        navigation.navigate("Setting")
     }
 
     const onShopPressed = () => {
@@ -43,70 +108,20 @@ const ProfileScreen = ({ navigation }) => {
         console.warn("mau liat wallet bos?")
     }
 
-    const onLogoutPressed = () => {
-        console.warn("mau logout bos?")
-    }
-
-    const profile = {
-        profilePicture: 'url-to-profile-picture',
-        name: 'Thomas Stefen',
-        username: '@thomaassm',
-        joined: '2 years ago',
-        location: 'Location',
-        aquariumCount: 5,
-    };
-
-    const carouselData = [
-        { id: '1', text: 'First item', color: 'lightblue' },
-        { id: '2', text: 'Second item', color: 'lightgreen' },
-        { id: '3', text: 'Third item', color: 'lightpink' },
-      ];
-    const [carouselIndex, setCarouselIndex] = useState(0);
-    carouselData.push(carouselData[0]);
-    carouselData.unshift(carouselData[carouselData.length - 2]);
-    const scrollX = useRef(new Animated.Value(0)).current;
-    const flatlistRef = useRef(null);
-
-    const viewableItemsChanged = useRef(({ viewableItems }) => {
-        const nextIndex = viewableItems[0].index;
-
-        // if user reaches the end, scroll back to the first item
-        if(nextIndex === carouselData.length - 1) {
-            setCarouselIndex(1);
-            flatlistRef.current.scrollToIndex({ index: 1, animated: false });
-        }
-        // if user scrolls back to the first item, scroll to the second to last item
-        else if(nextIndex === 0) {
-            setCarouselIndex(carouselData.length - 2);
-            flatlistRef.current.scrollToIndex({ index: carouselData.length - 2, animated: false });
-        }
-        else {
-            setCarouselIndex(nextIndex);
-        }
-    }).current;
-
-    const onScrollToIndexFailed = (info) => {
-        const wait = new Promise(resolve => setTimeout(resolve, 500));
-        wait.then(() => {
-            flatlistRef.current?.scrollToIndex({ index: info.index, animated: true });
-        });
-      }
-
-    const viewConfig = useRef({ viewAreaCoveragePercentThreshold:  50 }).current;
 
     return (
-        <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.container}>
+        <ScrollView showsVerticalScrollclearicator={true} contentContainerStyle={styles.container}>
 
             <TouchableOpacity style={styles.ImageCard} onPress={onEditProfilePicture}>
                 <Image 
                     style={styles.image}
-                    source={require('../assets/images/avatar.jpg')}
+                    source={user && user.avatar ? { uri: user.avatar } : require('../assets/images/user-profile.jpg')}
                 />
             </TouchableOpacity>
 
             <View style={styles.profileTextContainer}>
-                <Text style={styles.nameText}>{profile.name}</Text>
-                <Text style={styles.usernameText}>{profile.username}</Text>
+                <Text style={styles.nameText}>{user ? (user.fname + ' ' + user.lname) : 'Guest'}</Text>
+                <Text style={styles.usernameText}>{user ? '@' + user.username : '@guest'}</Text>
             </View>
             
             <CustomButton 
@@ -118,8 +133,6 @@ const ProfileScreen = ({ navigation }) => {
                 height={40}
                 onPress={onEditPressed}
             />
-
-            <CarouselToDo/>
 
             
             <TouchableOpacity style={styles.optionContainer} onPress={onSettingPressed}>

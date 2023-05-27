@@ -4,77 +4,41 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { storage } from '../firebaseConfig';
 import { getDownloadURL, ref, listAll } from 'firebase/storage';
 import CustomButton from '../components/CustomButton';
-import ImageUploadContext from './ImageUploadContext';
+
 import { themeColors } from '../theme';
 
 const PremiumScreen = () => {
   const navigation = useNavigation();
-  const [fishData, setFishData] = useState([]);
-  const handleImageUpload = useContext(ImageUploadContext);
 
-  const listAllImages = async () => {
-    const storageRef = ref(storage, 'uploaded_images/');
-    try {
-      const result = await listAll(storageRef);
-      const url = await Promise.all(
-        result.items.map(async (item) => {
-          const url = await getDownloadURL(ref(storage, item.fullPath));
-          return url;
-        })
-      );
-      setFishData(url);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useFocusEffect(() => {
-    listAllImages();
-  });
-
-  const onUploadImagePressed = () => {
-    navigation.navigate('UploadImageScreen', {
-      handleImageUpload });
-  };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={true} style={styles.container}>
-      <Text style={styles.titleText}>Nille Premium</Text>
-
-      <Text style={styles.subTitleText}> 
-        Jika ingin menambahkan data card, silakan upload gambar dengan menekan tombol di bawah 
-      </Text>
-
-      <View alignItems="center" marginBottom={30}>
-        <CustomButton 
-          type="LIGHT" 
-          text="Upload Image" 
-          width={250} 
-          onPress={onUploadImagePressed} 
-          marginVertical={5}
-        />
-      </View>
+    <View showsVerticalScrollIndicator={true} style={styles.container}>
       
-      <View style={styles.itemsContainer}>
-        {fishData.map((url, index) => (
-          <TouchableOpacity key={index} style={styles.item}>
-            <Image source={{ uri: url }} style={styles.itemImage} resizeMode="contain" />
-            <Text style={styles.itemTitle}>File {index + 1}</Text>
+      <View style={{ alignItems:'center' }}>
+
+          <TouchableOpacity style={styles.premiumCard}>
+            <Image
+              source={require("../assets/images/nille_logo.png")}
+              style={styles.image}
+              resizeMode='contain'
+            />
+
+            <Text style={styles.promoTitle}>Nille Premium</Text>
+
+            <Text style={styles.promoText}>Subscribe to use our complete features!</Text>
           </TouchableOpacity>
-        ))}
+          
       </View>
 
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    contentContainerStyle: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
     backgroundColor: themeColors.bgDark,
   },
@@ -99,6 +63,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 5,
   },
+  image: {
+    top: -56,
+    position: 'absolute',
+    width:'80%',
+    height:130,
+  },
   item: {
     alignItems:'center',
     justifyContent: 'center',
@@ -122,6 +92,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     padding:5,
+  },
+  premiumCard: {
+    width:'90%',
+    height:200,
+    backgroundColor: themeColors.Green,
+    alignItems:'center',
+    borderRadius:20,
+  },
+  promoTitle: {
+    marginTop:65,
+    fontSize: 24,
+    fontFamily:'CeraProBold',
+    textAlign: 'center', 
+    color: themeColors.bgDark,
+    paddingTop:20,
+  },
+  promoText: {
+    fontSize: 16, 
+    color: themeColors.bgDark, 
+    fontFamily:'CeraProMedium',
+    lineHeight:20,
+    textAlign:'center', 
+    paddingTop:10, 
+    paddingBottom:20,
+    marginHorizontal:20,
   },
 });
 

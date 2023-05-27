@@ -38,7 +38,6 @@ const GetStartedScreen = ({navigation}) => {
                 text = "Already a member? Sign in here" 
                 onPress={onSignInPressed} 
                 type='TEXT'
-                fontWeight={'bold'}
                 fontSize={16}
                 marginVertical={5}
             />  

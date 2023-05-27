@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { themeColors } from '../theme';
+import { firestoreDb } from '../firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
 
 const ChatBotScreen = () => {
   const [data, setData] = useState([]);
-  const apiKey = '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';
+  const [apiKey, setApiKey] = useState(null);
+  //const apiKey = Api_ChatBot;
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
   const [textInput, setTextInput] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const docRef = doc(firestoreDb, 'App_Creds', 'API');
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        setApiKey(docSnap.data().API_Chatbot);
+        //console.log(apiKey);
+      } else {
+        console.log("No such document!");
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   const handleSend = async () => {
     const prompt = textInput;
@@ -74,15 +93,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: 16,
     
+    
   },
   chat: {
     flex: 1,
     backgroundColor: themeColors.LightGreen,
-    borderRadius: 8,
     padding: 8,
     paddingHorizontal: 16,
     marginBottom: 20,
-    
+    borderRadius:20,
   },
   chatContent: {
     flexGrow: 1,

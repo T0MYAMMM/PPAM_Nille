@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomButton from '../components/CustomButton';
@@ -7,6 +7,9 @@ import { themeColors } from '../theme';
 import { theme } from 'native-base';
 import CarouselAquarium from '../components/carouselAquarium';
 import { useRoute } from '@react-navigation/native';
+
+//import CoffeeCard from '../components/coffeeCard';
+
 
 const MyAquariumScreen = () => {
     const route = useRoute();
@@ -29,15 +32,25 @@ const MyAquariumScreen = () => {
               <CarouselAquarium/>
             </View>
 
-            <CustomButton
-                text = 'Tombol'
-                onPress={onLogoutPressed} 
-                type='LIGHT'
-                width='50%'
-                height={50}
-                padding={12}
-                marginVertical={15}
-            />
+            <Text style={[styles.subTitleText, {top:-15,}]}>{")* Swipe left for add new aquarium"}</Text>
+
+
+          <View style={{ alignItems:'center', marginTop:50, }}>
+
+            <TouchableOpacity style={styles.premiumCard}>
+              <Image
+                source={require("../assets/images/nille_logo.png")}
+                style={styles.image}
+                resizeMode='contain'
+              />
+
+              <Text style={styles.promoTitle}>Nille Premium</Text>
+
+              <Text style={styles.promoText}>Subscribe to use our complete features!</Text>
+            </TouchableOpacity>
+
+          </View>
+
         </ScrollView>
     );
 }
@@ -47,27 +60,57 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 20,
     backgroundColor: themeColors.bgDark,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   titleText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily:'CeraProBold',
     textAlign: 'center', 
-    color: 'white',
+    color: themeColors.bgLight,
     paddingTop:20,
   },
   subTitleText : {
     fontSize: 16, 
-    color: 'white', 
-    fontWeight: 'normal', 
+    color: themeColors.bgLight, 
+    fontFamily:'CeraProLight',
     textAlign:'center', 
-    padding: 10,
-    marginHorizontal: 30, 
+    paddingTop:10, 
+    paddingBottom:20,
+    marginHorizontal:20,
   },
   carouselContainer: {
     height: 240, // adjust this value as needed
-    marginBottom: 20, // adjust this value as needed
+    marginBottom: 5, // adjust this value as needed
+  },
+  premiumCard: {
+    width:'90%',
+    height:200,
+    backgroundColor: themeColors.Green,
+    alignItems:'center',
+    borderRadius:20,
+  },
+  promoTitle: {
+    marginTop:65,
+    fontSize: 24,
+    fontFamily:'CeraProBold',
+    textAlign: 'center', 
+    color: themeColors.bgDark,
+    paddingTop:20,
+  },
+  promoText: {
+    fontSize: 16, 
+    color: themeColors.bgDark, 
+    fontFamily:'CeraProMedium',
+    lineHeight:20,
+    textAlign:'center', 
+    paddingTop:10, 
+    paddingBottom:20,
+    marginHorizontal:20,
+  },
+  image: {
+    top: -56,
+    position: 'absolute',
+    width:'80%',
+    height:130,
   },
 });
 

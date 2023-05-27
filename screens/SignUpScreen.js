@@ -1,11 +1,15 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import React, {useState} from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
-import { app, firestoreDb } from '../firebaseConfig';
+import { app, firestoreDb, db } from '../firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
+import { ref, set } from 'firebase/database';
 import { themeColors } from '../theme';
+import {EyeIcon as EyeSolid, EyeSlashIcon as EyeSlashSolid } from 'react-native-heroicons/solid';
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const SignUpScreen = ({navigation}) =>  {
     const [username, setUsername] = useState('');
@@ -14,6 +18,9 @@ const SignUpScreen = ({navigation}) =>  {
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isEmailRegistered, setIsEmailRegistered] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isRepeatPasswordVisible, setIsRepeatPasswordVisible] = useState(false);
+
 
     const registerUser = async (email, password) => {
         try {
@@ -34,6 +41,13 @@ const SignUpScreen = ({navigation}) =>  {
             const userProfile = {
                 username: username,
                 email: user.email,
+                avatar: '',
+                fname: '',
+                lname: '',
+                contact: '',
+                totalAquarium: '0',
+                points: '0',
+                subscription: 'free',
                 created_at: new Date().toISOString(), // current date and time in ISO format
                 email_verified: user.emailVerified,
                 // any other fields you want to include
@@ -41,6 +55,25 @@ const SignUpScreen = ({navigation}) =>  {
         
             // after updating profile, save user to Firestore
             await setDoc(doc(firestoreDb, 'users', user.uid), userProfile);
+
+            // Initialize the user's tasks data in Firebase.
+            const todoRef = ref(db, `ToDo/${user.uid}/`);
+            console.log(todoRef);
+
+            const initialData = {};
+            days.forEach((day) => {
+                initialData[day] = {
+                    tasks: [{
+                        "taskName": "Today's reminder",
+                        "time": " "
+                      }]
+                };
+            });
+
+            console.log(initialData);
+            set(todoRef, initialData)
+                .catch((error) => console.log(error));
+
 
             // send email verification
             await user.sendEmailVerification();
@@ -69,6 +102,8 @@ const SignUpScreen = ({navigation}) =>  {
                 setErrorMessage('This email is already registered');
             } else if (error.code === 'auth/invalid-email') {
                 setErrorMessage('Invalid email');
+            } else if (error.code === 'auth/network-request-failed') {
+                setErrorMessage('Network problem');
             } else {
                 setErrorMessage(error.message);
             }
@@ -124,7 +159,7 @@ const SignUpScreen = ({navigation}) =>  {
         <View style={styles.root}>
             <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.scrollViewContent}>
                 
-                <Text style = {styles.title}>Create an account</Text>
+                <Text style = {styles.title}>The Ocean in your pocket!</Text>
 
                 <CustomInput 
                     placeholder = "Username"
@@ -142,15 +177,25 @@ const SignUpScreen = ({navigation}) =>  {
                     placeholder = "Password"
                     value = {password}
                     setValue = {setPassword}
-                    secureTextEntry
+                    secureTextEntry = {!isPasswordVisible}
+                    rightIcon={
+                        <TouchableOpacity onPress={() => setIsPasswordVisible(prevState => !prevState)}>
+                        {isPasswordVisible ? <EyeSolid size={20} color={themeColors.Pink} /> : <EyeSlashSolid size={20} color={themeColors.DarkBlue} />}
+                        </TouchableOpacity>
+                    }
                 />
 
                 <CustomInput
                     placeholder = "Repeat Password"
                     value = {passwordRepeat}
                     setValue = {setPasswordRepeat}
-                    secureTextEntry
+                    secureTextEntry = {!isRepeatPasswordVisible}
                     width={'80%'}
+                    rightIcon={
+                        <TouchableOpacity onPress={() => setIsRepeatPasswordVisible(prevState => !prevState)}>
+                        {isRepeatPasswordVisible ? <EyeSolid size={20} color={themeColors.Pink} /> : <EyeSlashSolid size={20} color={themeColors.DarkBlue} />}
+                        </TouchableOpacity>
+                    }
                 />  
 
                 <View>
@@ -201,12 +246,14 @@ const styles = StyleSheet.create({
     text : {
         textAlign: 'center',
         color: themeColors.bgLight,
+        fontFamily: 'CeraProMedium',
+        lineHeight:18,
         marginVertical: 10,
         marginHorizontal: 50,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontFamily: 'CeraProBold',
         color: themeColors.bgLight,
         margin: 20,
     },

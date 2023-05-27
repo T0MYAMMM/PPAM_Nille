@@ -9,7 +9,6 @@ import {
   Alert,
 } from 'react-native';
 
-import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 

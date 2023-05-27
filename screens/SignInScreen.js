@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, useWindowDimensions, ScrollView, TouchableOpacity } from 'react-native';
 import React, {useState} from 'react';
 import Logo from '../assets/images/login_logo.png';
 import CustomInput from '../components/CustomInput';
@@ -6,19 +6,24 @@ import CustomButton from '../components/CustomButton';
 import SocialSignInButtons from '../components/SocialSignInButtons';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
-import { firestoreDb } from '../firebaseConfig';
+import { firestoreDb, auth, db } from '../firebaseConfig';
+//import { GoogleSignIn } from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { themeColors } from '../theme';
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+import {EyeIcon as EyeSolid, EyeSlashIcon as EyeSlashSolid } from 'react-native-heroicons/solid';
 
 const SignInScreen = ({navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
     const {height} = useWindowDimensions();   
     const auth = getAuth();
     //auth.currentUser = null;
-    console.log(auth)
-
     const saveAccessTokenToStorage = async (accessToken) => {
         try {
           await AsyncStorage.setItem('authToken', accessToken);
@@ -41,21 +46,22 @@ const SignInScreen = ({navigation}) => {
                 const userProfile = {
                     username: user.displayName,
                     email: user.email,
-                    created_at: new Date().toISOString(),
                     email_verified: user.emailVerified,
                 };
                 await setDoc(doc(firestoreDb, 'users', user.uid), userProfile, {merge: true});
-            }
+
+                }
         }, 5000); // Check every 5 seconds
     };
 
+    const googleLogin = async () => {
+        console.log("Google Sign In")
+    };
+
     const loginUser = async (username, password) => {
-        console.log(username);
-        console.log(password);
         try {
                 const userCredential = await signInWithEmailAndPassword(auth, username, password);
                 const authToken = auth.currentUser.stsTokenManager.accessToken;
-                console.log(authToken);
 
                 if (auth.currentUser.emailVerified) {
                     console.log('User signed in:', userCredential.user);
@@ -112,7 +118,7 @@ const SignInScreen = ({navigation}) => {
                 resizeMode='contain'
             />
             <CustomInput 
-                placeholder = "Username"
+                placeholder = "Email"
                 value = {username}
                 setValue = {setUsername}
                 width={'80%'}
@@ -122,7 +128,12 @@ const SignInScreen = ({navigation}) => {
                 placeholder = "Password"
                 value = {password}
                 setValue = {setPassword}
-                secureTextEntry
+                secureTextEntry = {!isPasswordVisible}
+                    rightIcon={
+                        <TouchableOpacity onPress={() => setIsPasswordVisible(prevState => !prevState)}>
+                        {isPasswordVisible ? <EyeSolid size={20} color={themeColors.Pink} /> : <EyeSlashSolid size={20} color={themeColors.DarkBlue} />}
+                        </TouchableOpacity>
+                    }
             />  
 
             {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
@@ -143,7 +154,9 @@ const SignInScreen = ({navigation}) => {
                 fontSize={16}
             />
 
-            <SocialSignInButtons/>
+            <SocialSignInButtons
+                googleLogin={googleLogin}
+            />
 
             <CustomButton 
                 text = "Don't have an account? create one" 

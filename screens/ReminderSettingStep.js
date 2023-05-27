@@ -24,11 +24,12 @@ const ReminderSettingStep = ({ formData, setFormData, nextStep, prevStep }) => {
     };
 
     const setReminder = () => {
+        const timeStrings = selectedTimes.map(time => time.toISOString());
         setFormData({
             ...formData,
             reminder: {
                 times: feedingTimes,
-                time: selectedTimes,
+                time: timeStrings,
                 foodType: selectedFoodType,
             },
         });
@@ -81,7 +82,11 @@ const ReminderSettingStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Waktu Pengingat:</Text>
+
+            <View style={{alignItems:'center', marginTop: 5}}>
+                <Text style={styles.title}>Waktu Pengingat:</Text>
+            </View>
+            
             <Picker
                 selectedValue={feedingTimes}
                 style={styles.picker}
@@ -98,7 +103,11 @@ const ReminderSettingStep = ({ formData, setFormData, nextStep, prevStep }) => {
 
             {pickerItems}
 
-            <Text style={styles.title}>Jenis Pakan:</Text>
+            <View style={{alignItems:'center', marginTop: 15}}>
+                <Text style={styles.title}>Jenis Pakan:</Text>     
+            </View>    
+           
+
             <Picker
                 selectedValue={selectedFoodType}
                 style={styles.picker}
@@ -129,8 +138,8 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontFamily: 'CeraProBold',
         color: themeColors.bgLight,
         marginBottom: 20,
     },
@@ -138,13 +147,15 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     label: {
-        fontSize: 16,
+        fontSize: 18,
+        fontFamily: 'CeraProMedium',
         color: themeColors.bgLight,
         marginBottom: 10,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop: 30,
     },
     button: {
         backgroundColor: themeColors.Blue,
@@ -154,10 +165,16 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: themeColors.bgLight,
+        fontSize: 18,
+        fontFamily: 'CeraProBold',
     },
     picker: {
         backgroundColor: themeColors.LightBlue,
         borderRadius: 20,
+        color: themeColors.bgDark,
+        fontSize: 18,
+        fontFamily: 'CeraProMedium',
+        marginBottom:10,
     },
 });
 

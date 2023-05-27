@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
+import { themeColors } from '../theme';
+import { theme } from 'native-base';
+const optionwidth = 0.3*330;
+
+
 const OptionButton = ({ options, title, selectOption }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -19,7 +24,7 @@ const OptionButton = ({ options, title, selectOption }) => {
             style={[styles.option, selectedOption === option && styles.selectedOption]}
             onPress={() => onPressOption(option)}
           >
-            <Text style={styles.optionText}>{option}</Text>
+            <Text style={[styles.optionText, selectedOption === option && styles.selectedText]}>{option}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -29,32 +34,49 @@ const OptionButton = ({ options, title, selectOption }) => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems:'center',
     marginVertical: 10,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily:'CeraProBold',
     marginBottom: 10,
-    color: '#fff',
+    color: themeColors.bgDark,
   },
   optionsContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
-  option: {
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#fff',
+  optionsContainer2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width:330,
+    backgroundColor: 'red',
   },
+  option: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: themeColors.bgLight,
+    marginHorizontal: 10,
+    alignItems: 'center',
+  },
+  
   selectedOption: {
-    backgroundColor: '#fff',
-    borderColor: '#000',
+    backgroundColor: themeColors.bgDark,
+    borderColor: themeColors.bgLight,
+    elevation:55,
+    borderWidth: 2,
   },
   optionText: {
     fontSize: 16,
-    color: '#fff',
-  }
+    fontFamily:'CeraProBold',
+    color: themeColors.bgDark,
+  },
+  selectedText: {
+    color: themeColors.bgLight,
+  },
 });
 
 export default OptionButton;

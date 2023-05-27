@@ -7,7 +7,7 @@ import { themeColors } from '../theme';
 
 const IconSize = 30;
 
-const ScreenHeader = ({ menu, onMenuPress, back, title1, title2, opennotif, navigation, headerBg, iconColor, optionalbadge, titleColor }) => {
+const ScreenHeader = ({ menu, onMenuPress, back, title1, title2, opennotif, navigation, headerBg, iconColor, optionalbadge, titleColor, notif=true }) => {
   return (
     <Surface style={[styles.header, {backgroundColor:  headerBg}]}>
 
@@ -32,13 +32,12 @@ const ScreenHeader = ({ menu, onMenuPress, back, title1, title2, opennotif, navi
       </View>
 
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={opennotif}>
 
+        { notif && <TouchableOpacity style={styles.button} onPress={opennotif}>
             <BellOutline name="bell-notif" size={20} color={iconColor}/>
             
             <Badge style={{position:'absolute', top:-5, right:-5, }}>{optionalbadge}</Badge>
-        
-        </TouchableOpacity>
+        </TouchableOpacity>}
 
       </View>
     </Surface>

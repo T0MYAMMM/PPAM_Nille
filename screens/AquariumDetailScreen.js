@@ -15,6 +15,41 @@ const speciesList = [
   // tambahkan sebanyak yang dibutuhkan
 ];
 
+const aquariumData = [
+  {
+    name: "akuarium a",
+    size: "medium",
+    water: "fresh",
+    email: "samoht.nefets@gmail.com",
+    accessories: "Yes",
+    fish : {
+      asal: "Papua",
+      ciri_umum: "Ikan jantan secara keseluruhan berwarna kehijauan dengan refleksi keperakan pada bagian sisi punggung dan kepala. Pada bagian dorsal terdapat garis-garis warna yang terbentuk oleh susunan sisik berwarna hijau-kuning, sedangkan pada bagian ventral membentuk strip-strip biru bergantian dengan jingga, sirip berwarna transkulen kehijauan. Jantan berbentuk pipih dan memiliki pemanjangan tulang posterior.",
+      distribusi_habitat: "Wilayah Sungai Grime khususnya di Danau Nenggwambu (Danau Kali Biru), sekitar 50 km sebelah barat Danau Sentani. Tahun 2008 ditemukan pula di Danau Jaigum.",
+      id_spesies: "ab01",
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/nille-14a1f.appspot.com/o/ornamental_fish_images%2FDority%E2%80%99s%20Rainbowfish.jpg?alt=media&token=a0a162eb-2635-4448-837f-d46ffcd95431",
+      keterangan: "Berkelompok",
+      kode_area: "1",
+      nama_ilmiah : "Glossolepis dorityi Allen, 2001",
+      nama_lokal : "-",
+      nama_populer : "Dority’s Rainbowfish",
+      pakan_larva : "Plankton, insekta air.",
+      pemeliharaan : "Sifatnya berkelompok dan pendamai, dapat dipelihara bersama ikan rainbow lainnya. Bersifat omnivora (pemakan segala).",
+      reproduksi: "Hampir sama dengan ikan rainbow lainnya. Pemijahan berlangsung pada akar tanaman air atau substrat. Substrat yang tertempeli telur dipisahkan dari induknya.",
+      status : "Asli. Kategori IUCN Red List Status Not Evaluated (Ref. 96402). Pertama kali ditemukan tahun 2000 dan ditemukan kembali oleh peneliti yang sama pada tahun 2008. Namanya diambil dari seorang yang telah berupaya mengoleksi spesies ini, yaitu Dan Dority. Kondisi terancam punah punah, diduga akibat dari introduksi ikan gabus (Channa striata) dan ikan mas (Cyprinus carpio).",
+      sumber : "Tappin, 2010",
+      ukuran_maksimum: "Betina 8 cm, Jantan 10 cm"
+    },
+    reminder: {
+      foodType: "palet",
+      times: "1",
+      time: {
+        0:"2023-05-25T06:59:41.842Z"
+      }
+    }
+  }
+]
+
 const AquariumDetailScreen = ({ navigation }) => {
   const [speciesId, setSpeciesId] = useState(speciesList[0].id);
   const [size, setSize] = useState('');
@@ -76,7 +111,7 @@ const AquariumDetailScreen = ({ navigation }) => {
 
             <Text style={styles.subTitleText}> Disini nanti ada upload images </Text>
 
-            <Text style={styles.titleText}>Uploaded images</Text>
+            <Text style={styles.titleText}>Aquarium Gallery</Text>
 
             <Text style={styles.subTitleText}> 
                 Jika ingin menambahkan data card, silakan upload gambar dengan menekan tombol di bawah 

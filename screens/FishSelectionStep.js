@@ -1,43 +1,51 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View, Button, Text, StyleSheet, TouchableOpacity, TextInput, Image, SafeAreav } from 'react-native';
 import { themeColors } from '../theme';
+import { db } from '../firebaseConfig.js';
+import { onValue, ref } from 'firebase/database';
+import { MagnifyingGlassIcon as MagnifyingGlassSolid } from 'react-native-heroicons/solid';
 
-const fishList = [
-    { id: '1', name: 'Ikan Koi', water: 'fresh', size: 'large' },
-    { id: '2', name: 'Ikan Mas', water: 'fresh', size: 'medium' },
-    { id: '3', name: 'Ikan Hiu', water: 'salt', size: 'large' },
-    { id: '4', name: 'Ikan Cupang', water: 'fresh', size: 'small' },
-    { id: '5', name: 'Ikan Kerapu', water: 'salt', size: 'medium' },
-    // Tambahkan data ikan lainnya di sini
-  ];
+import CustomButton from '../components/CustomButton';
 
 const FishSelectionStep = ({ formData, setFormData, nextStep, prevStep }) => {
     const [selectedFishId, setSelectedFishId] = useState(null);
-
-    const selectFish = (fishId) => {
-        const selectedFish = fishList.find((fish) => fish.id === fishId);
-        setSelectedFishId(fishId);
-        setFormData({
-          ...formData,
-          fish: selectedFish,
+    const [allFishData, setAllFishData] = useState([]);
+    const [displayFishData, setDisplayFishData] = useState([]);
+    const [query, setQuery] = useState('');
+  
+    useEffect(() => {
+      const fishRef = ref(db, 'ornamental_data_fish/');
+      onValue(fishRef, (snapshot) => {
+        const data = snapshot.val();
+        const newPosts = Object.keys(data).map((key) => {
+          return { id_spesies: key, ...data[key] };
         });
+        setAllFishData(newPosts);
+        setDisplayFishData(newPosts);
+      });
+    }, []);
+  
+    const cardColors = [
+        themeColors.bgLight,
+    ];
+
+    const onSearchFish = () => {
+      const filteredFish = allFishData.filter((fish) =>
+        fish.nama_populer.toLowerCase().includes(query.toLowerCase())
+      );
+      setDisplayFishData(filteredFish);
+    };
+  
+    const selectFish = (fishId) => {
+      const selectedFish = allFishData.find((fish) => fish.id_spesies === fishId);
+      setSelectedFishId(fishId);
+      setFormData({
+        ...formData,
+        fish: selectedFish,
+      });
     };
 
     console.log(formData.fish)
-
-    const filteredFishList = fishList.filter((fish) => {
-        let isMatch = fish.water === formData.water;
-        if (formData.size === 'large') {
-            isMatch = isMatch && (fish.size === 'small' || fish.size === 'medium' || fish.size === 'large');
-        } else if (formData.size === 'medium') {
-            isMatch = isMatch && (fish.size === 'small' || fish.size === 'medium');
-        } else {
-            isMatch = isMatch && fish.size === formData.size;
-        }
-        return isMatch;
-    });
-
-    console.log(formData)
 
     const onNextStep = () => {
         if (formData.fish != undefined){
@@ -52,56 +60,154 @@ const FishSelectionStep = ({ formData, setFormData, nextStep, prevStep }) => {
     }
 
     return (
-        <View>
-            <ScrollView horizontal>
-                {filteredFishList.map((fish) => (
-                <TouchableOpacity
-                    key={fish.id}
+        <View style={styles.container}>
+            <View style={styles.searchBar}>
+                <MagnifyingGlassSolid size={20} color={themeColors.Red} />
+                <TextInput
+                style={styles.searchInput}
+                placeholder="Search Fish"
+                value={query}
+                onChangeText={setQuery}
+                onSubmitEditing={onSearchFish}
+                returnKeyType="search"
+                />
+            </View>
+        
+            <ScrollView style={styles.scrollView}>
+                <View style={styles.fishGrid}>
+                {displayFishData.map((fish, index) => (
+                    <TouchableOpacity
+                    key={fish.id_spesies}
                     style={[
-                    styles.card,
-                    selectedFishId === fish.id && styles.selectedCard,
+                        styles.card,
+                        { backgroundColor: cardColors[index % cardColors.length] },
+                        selectedFishId === fish.id_spesies && styles.selectedCard,
                     ]}
-                    onPress={() => selectFish(fish.id)}
-                >
-                    <Text style={styles.fishName}>{fish.name}</Text>
-                </TouchableOpacity>
+                    onPress={() => selectFish(fish.id_spesies)}
+                    >
+                        <Image style={styles.fishImage} source={{uri: fish.imageUrl}} />
+                        <Text style={styles.fishName} numberOfLines={2}>
+                            {fish.nama_populer}
+                        </Text>
+                    </TouchableOpacity>
                 ))}
+                </View>
             </ScrollView>
 
-            <View style={styles.navigationButtons}>
-                <Button title="Next" onPress={onNextStep} />
-                <Button title="Prev" onPress={onPrevStep} />
+            <View style={{ alignItems:'center', flexDirection:'row', position: 'absolute', top: 560, left:220 }}>
+                <CustomButton 
+                    text="Next" 
+                    type='LIGHT'
+                    onPress={nextStep}
+                    width={100} 
+                    padding={12}
+                />
             </View>
+
+            <View style={{ alignItems:'center', flexDirection:'row', position: 'absolute', top: 560, left:30 }}>
+                <CustomButton 
+                    text="Prev" 
+                    type='LIGHT'
+                    onPress={prevStep}
+                    width={100} 
+                    padding={12}
+                />
+            </View>
+
         </View>
       );
 };
 
 const styles = StyleSheet.create({
-    questionText: {
-        color: themeColors.bgLight,
-        marginBottom: 10,
+    container: {
+        flex: 1,
+    },
+    scrollView: {
+        flex: 1,
+        borderRadius:30,
+        marginBottom: 80, // adjust this value to the height of your navigation buttons
     },
     fishName: {
         color: themeColors.bgLight,
         marginBottom: 5,
-    },
-    noFishText: {
-        color: themeColors.bgLight,
-        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     card: {
-        margin: 10,
+        width: '48%',
         padding: 10,
-        borderRadius: 5,
-        backgroundColor: 'gray',
-    },
-    selectedCard: {
-        backgroundColor: 'blue',
+        borderRadius: 10,
+        marginBottom: 10,
+        margin: 10,
+        backgroundColor: themeColors.bgButton,
+        alignItems: 'center',
     },
     navigationButtons: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
+        padding: 10,
+        backgroundColor: '#fff',  // change to match your theme
+    },
+    searchBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: themeColors.bgLight,
+        borderRadius: 75,
+        paddingHorizontal: 10,
+        width: '90%',
+        height: 40,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 100,
+        elevation: 5,
+        marginBottom: 10,
+        marginHorizontal:17,
+    },
+    searchInput: {
+        marginLeft: 8,
+        color:themeColors.bgDark,
+        fontWeight:'bold',
+        fontSize: 16,
+        flex: 1,
+    },
+    fishGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        padding: 10,
+    },
+    card: {
+        width: '48%',
+        padding: 12,
+        borderRadius: 30,
+        marginBottom: 10,
+    },
+    selectedCard: {
+        backgroundColor: themeColors.LightGreen,
+        borderColor: themeColors.bgDark,
+        borderWidth: 5,
+    },
+    fishImage: {
+        width: '100%',
+        height: 100,
+        resizeMode: 'cover',
+        borderRadius: 20,
+    },
+    fishName: {
+        color: themeColors.bgLight,
+        marginBottom: 5,
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginTop: 5,
+        color: themeColors.bgDark,
+        textAlign: 'center',
     },
 });
 

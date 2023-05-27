@@ -3,30 +3,26 @@ import React from 'react';
 import CustomButton from './CustomButton';
 import Google_Logo from '../assets/images/Google_Logo.png';
 
-
-const SocialSignInButtons = () => {
+const SocialSignInButtons = ({ googleLogin }) => {
     const onSignInGooglePressed = () => {
         console.warn('Sign in with Google');
+        googleLogin();
     };
 
     return (
         <> 
             <CustomButton
                 onPress={onSignInGooglePressed}
-                bgColor="white"
-                fgColor="#DD4D44"
                 type={"WITHICON"}
-                width={200}
+                text="Sign In with Google"
+                width={220}
                 icon={
                     <Image
                         source={Google_Logo}
-                        style={{ width: 30, height: 30, marginRight: 100 }}
+                        style={{ width: 30, height: 30 }}
                         resizeMode='contain'
                     />
                 }>
-                <View style={styles.buttonContent}>
-                  <Text style={styles.buttonText}>Sign In with Google</Text>
-                </View>
             </CustomButton>
         </>
   );

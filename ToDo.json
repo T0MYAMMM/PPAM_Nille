@@ -1,0 +1,54 @@
+{
+    "GmkDlpmnoeNrhAzSqP5zlED2Lwm1": {
+        "Monday": {
+            "tasks": [
+                {"taskName": "Pekerjaan 1", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Tuesday": {
+            "tasks": [
+                {"taskName": "Pekerjaan 1", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Wednesday": {
+            "tasks": [
+                {"taskName": "Pekerjaan 1", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Thursday": {
+            "tasks": [
+                {"taskName": "Pekerjaan 1", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Friday": {
+            "tasks": [
+                {"taskName": "Pekerjaan 1", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Saturday": {
+            "tasks": [
+                {"taskName": "Feed Aquarium A", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        },
+        "Sunday": {
+            "tasks": [
+                {"taskName": "Feed Aquarium A", "time": "08.00"}, 
+                {"taskName": "Pekerjaan 2", "time": "12.00"}, 
+                {"taskName": "Pekerjaan 3", "time": "16.00"}
+            ]
+        }
+    },
+    "email": "samoht.nefets@gmail.com"
+}

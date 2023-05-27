@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     
     container_WITHICON: {
         width: 600,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: themeColors.bgLight,
         borderRadius: 75,
         shadowColor: '#000',
         shadowOffset: {
@@ -95,22 +95,29 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontWeight: 'bold',
+        fontFamily: 'CeraProMedium',
         fontSize: 16,
     },
 
     text_DARK: {
         color: themeColors.bgLight,
+        fontFamily: 'CeraProBold',
         fontSize: 16,
     },
     text_LIGHT: {
         color: themeColors.bgLight,
+        fontFamily: 'CeraProBold',
+        fontSize: 16,
+    },
+    text_WITHICON: {
+        color: themeColors.bgDark,
+        fontFamily: 'CeraProBold',
         fontSize: 16,
     },
 
     text_TEXT: {
-        fontWeight:'normal',
-        color: 'white',
+        fontFamily: 'CeraProLight',
+        color: themeColors.bgLight,
     },
 
     iconContainer: {

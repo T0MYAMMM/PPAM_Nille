@@ -17,6 +17,7 @@ const SearchScreen = ({ navigation }) => {
       const startCountRef = ref(db, 'ornamental_data_fish/');
       onValue(startCountRef, (snapshot) => {
         const data = snapshot.val();
+        
         const newPosts = Object.keys(data).map((key) => {
           const { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber, imageUrl } = data[key];
           return { id_spesies, nama_ilmiah, nama_populer, nama_lokal, asal, ciri_umum, ukuran_maksimum, status, kode_area, distribusi_habitat, keterangan, pemeliharaan, reproduksi, pakan_larva, sumber, imageUrl };
@@ -81,9 +82,18 @@ const SearchScreen = ({ navigation }) => {
         </View> 
 
         <View style={styles.categorycontainer}>
-          <Text style={styles.categoryTitle2}>Freshwater</Text>
-          <Text style={styles.categoryTitle}>Ornamental</Text>
-          <Text style={styles.categoryTitle2}>Predator</Text>
+          <TouchableOpacity>
+            <Text style={styles.categoryTitle2}>Freshwater</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <Text style={styles.categoryTitle}>Ornamental</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity>
+          <Text style={styles.categoryTitle2}>Predator</Text>  
+          </TouchableOpacity>
+          
         </View>
 
         <View style={styles.content2}>

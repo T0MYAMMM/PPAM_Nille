@@ -16,7 +16,8 @@ import {HomeIcon as HomeSolid, HeartIcon as HeartSolid, ChatBubbleOvalLeftIcon a
 
 //Firebase
 import { get, ref } from 'firebase/database';
-import { db } from '../firebaseConfig'; 
+import { db, auth, firestoreDb } from '../firebaseConfig'; 
+import { doc, getDoc } from 'firebase/firestore';
 
 // Screen
 // - Stack
@@ -58,6 +59,7 @@ const Drawer = createDrawerNavigator();
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
+
 
 const CustomHeader = ({ title1, title2, onBackPress }) => {
   const navigation = useNavigation();
@@ -249,8 +251,28 @@ const StackNavigator = () => {
 };
 
 const BottomTabNavigation = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const userDocRef = doc(firestoreDb, 'users', user.uid);
+          const docSnapshot = await getDoc(userDocRef);
+          if (docSnapshot.exists()) {
+            setUser(docSnapshot.data());
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
-    
       <Tab.Navigator
           initialRouteName="Home"
           screenOptions={({ route }) => ({
@@ -274,27 +296,27 @@ const BottomTabNavigation = () => {
       >
           <Tab.Screen name="home" component={HomeScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title1="Hi Tom" title2="Welcome!" />
+                <CustomHeader title1={user ? 'Hi ' + user.fname : 'Loading...'} title2="Welcome!" />
               ),
             })}/>
           <Tab.Screen name="aquarium" component={MyAquariumScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title1="Hi Tom" title2="Welcome!"/>
+                <CustomHeader title1={user ? user.fname + "'s" : 'Loading...'} title2="Aquarium"/>
               ),
             })}/>
           <Tab.Screen name="search" component={SearchScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title1="Hi Tom" title2="Welcome!" />
+                <CustomHeader title1="explore" title2="The Ocean!" />
               ),
             })}/>
           <Tab.Screen name="nille" component={ChatBotScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title1="Hi Tom" title2="Welcome!" />
+                <CustomHeader title1="Mr. Nille" title2="The Chatbots" />
               ),
             })}/>
           <Tab.Screen name="premium" component={PremiumScreen} options={({ navigation }) => ({
               header: () => (
-                <CustomHeader title1="Hi Tom" title2="Welcome!" />
+                <CustomHeader title1="Ready to" title2="Subscribe?" />
               ),
             })}/>  
       </Tab.Navigator>
@@ -334,7 +356,7 @@ const DrawerNavigation = () => {
           headerShown: false,
           drawerActiveBackgroundColor: themeColors.LightBlue,
           drawerActiveTintColor: themeColors.bgLight,
-          drawerInactiveTintColor: themeColors.Pink,
+          drawerInactiveTintColor: themeColors.bgLight,
           drawerLabelStyle: {
           marginLeft: 20,
           fontFamily: 'CeraProMedium',
@@ -365,8 +387,8 @@ const DrawerNavigation = () => {
             headerShown: true,
             header: () => (
               <CustomHeader 
-                title1="Hi Tom" 
-                title2="Welcome back!" 
+                title1="my" 
+                title2="Profile" 
                 onBackPress={true}
               />
             ),
@@ -381,8 +403,8 @@ const DrawerNavigation = () => {
             headerShown: true,
             header: () => (
               <CustomHeader 
-                title1="Aquarium" 
-                title2="Detail" 
+                title1="app" 
+                title2="Settings" 
                 onBackPress={true}
               />
             ),
@@ -395,6 +417,7 @@ const DrawerNavigation = () => {
 };
 
 const AppNavigation = () => {
+
   return (
     <NavigationContainer>
       
